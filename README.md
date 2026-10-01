@@ -43,21 +43,23 @@ O **IAPLAY Studio** é uma estação de trabalho de áudio e inteligência artif
 ## 🚀 Instalação Rápida
 
 ### No Windows:
-1. Clone o repositório ou baixe o código-fonte:
+1. Clone o repositório ou baixe o arquivo ZIP da branch `standalone`:
    ```bash
-   git clone https://github.com/SEU-USUARIO/IAPLAY-SEM-PINOKIO.git
-   cd IAPLAY-SEM-PINOKIO
+   git clone -b standalone https://github.com/IA-Play/compositor-musical-iaplay.git
+   cd compositor-musical-iaplay
    ```
+   *(Ou clique em **Code > Download ZIP** no GitHub e extraia a pasta no seu computador)*
+
 2. Dê **dois cliques** no arquivo:
    ```
    instalar.bat
    ```
-   *O instalador criará o ambiente virtual Python (`env`), instalará os pacotes do PyTorch com suporte a CUDA (se tiver placa NVIDIA) e baixará os modelos neurais YuE2 automaticamente.*
+   *O instalador configurará o ambiente Python (`env`), instalará os pacotes de áudio neural com aceleração CUDA (se houver placa NVIDIA) e baixará os pesos do YuE2 automaticamente.*
 
 ### No Linux / macOS:
 ```bash
-git clone https://github.com/SEU-USUARIO/IAPLAY-SEM-PINOKIO.git
-cd IAPLAY-SEM-PINOKIO
+git clone -b standalone https://github.com/IA-Play/compositor-musical-iaplay.git
+cd compositor-musical-iaplay
 chmod +x instalar.sh iniciar.sh
 ./instalar.sh
 ```
