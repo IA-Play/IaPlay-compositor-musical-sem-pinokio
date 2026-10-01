@@ -46,6 +46,13 @@ if "%PYTHON_EXE%"=="" (
 
 echo [OK] Python: %PYTHON_EXE%
 
+REM 2.1 Verifica modulo essencial setuptools (necessario para compilacao de extensoes PyTorch/BigVGAN)
+"%PYTHON_EXE%" -c "import setuptools" >nul 2>&1
+if errorlevel 1 (
+    echo [IAPLAY] Instalando modulo neural essencial setuptools...
+    "%PYTHON_EXE%" -m pip install setuptools wheel >nul 2>&1
+)
+
 REM 3. Verifica Node.js
 where node >nul 2>&1
 if errorlevel 1 (

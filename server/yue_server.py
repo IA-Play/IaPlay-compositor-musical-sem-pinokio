@@ -16,6 +16,17 @@ if sys.platform == "win32":
     except Exception:
         pass
 
+# Garante presença obrigatória do setuptools (necessário para extensões C++/CUDA do PyTorch e BigVGAN)
+try:
+    import setuptools
+except ImportError:
+    try:
+        import subprocess
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "setuptools", "wheel"])
+        import setuptools
+    except Exception as _e:
+        print(f"[IAPLAY Engine] Aviso ao tentar instalar setuptools automaticamente: {_e}")
+
 import re
 import shutil
 import subprocess

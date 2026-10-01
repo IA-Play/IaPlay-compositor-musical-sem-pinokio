@@ -102,9 +102,9 @@ echo.
 echo [3/4] Instalando dependencias do servidor de IA...
 where uv >nul 2>&1
 if %ERRORLEVEL% equ 0 (
-    uv pip install -r "%SCRIPT_DIR%server\requirements.txt" --python "%PYTHON_EXE%"
+    uv pip install setuptools wheel -r "%SCRIPT_DIR%server\requirements.txt" --python "%PYTHON_EXE%"
 ) else (
-    "%PYTHON_EXE%" -m pip install -r "%SCRIPT_DIR%server\requirements.txt"
+    "%PYTHON_EXE%" -m pip install setuptools wheel -r "%SCRIPT_DIR%server\requirements.txt"
 )
 
 REM 6. Instala dependencias do frontend web
