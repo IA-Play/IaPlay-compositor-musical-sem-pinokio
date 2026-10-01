@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Allow: /blog
+Disallow: /admin
+Disallow: /editor/
+Disallow: /dashboard
+Disallow: /checkout/
+Disallow: /payment/
+Disallow: /settings
+Disallow: /royalties
+
+Sitemap: https://iaplay.com.br/sitemap.xml

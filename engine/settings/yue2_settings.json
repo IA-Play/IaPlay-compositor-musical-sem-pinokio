@@ -1,0 +1,23 @@
+{
+    "settings_version": 2.58,
+    "prompt": "[Verse]\nMorning light across the bay\nWe watch the shadows drift away\n[Chorus]\nStay with me until the dawn\nLet our little song go on",
+    "resolution": "832x480",
+    "flow_shift": 5.0,
+    "alt_prompt": "English acoustic pop, warm female vocal, fingerpicked guitar, gentle drums, hopeful, 90 BPM",
+    "audio_prompt_type": "",
+    "duration_seconds": 120,
+    "video_length": 0,
+    "num_inference_steps": 32,
+    "guidance_scale": 1.0,
+    "temperature": 1.0,
+    "top_k": 100,
+    "top_p": 0.95,
+    "model_mode": 2,
+    "custom_settings": {
+        "abc": ""
+    },
+    "prompt_enhancer": "",
+    "negative_prompt": "",
+    "repeat_generation": 1,
+    "multi_prompts_gen_type": "FG"
+}

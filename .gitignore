@@ -1,0 +1,57 @@
+# Dependências Node.js
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Dependências e Ambientes Python
+env/
+venv/
+.venv/
+env*/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+eggs/
+.eggs/
+parts/
+var/
+sdist/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Pesos e Modelos Neurais de IA (Pesados)
+ckpts/
+engine/ckpts/
+*.safetensors
+*.ckpt
+*.pt
+*.bin
+*.onnx
+
+# Dados e Arquivos Gerados pelo Usuário
+outputs/
+engine/outputs/
+uploads/
+premium_uploads/
+cache/
+logs/
+*.log
+
+# Variáveis de Ambiente e Segredos
+.env
+.env.local
+.env.*.local
+
+# IDEs e Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

@@ -1,0 +1,21 @@
+{
+    "settings_version": 2.58,
+    "prompt": "A cinematic medium shot follows a weathered astronaut walking through tall silver grass beneath two moons. Wind moves the grass and the fabric of the suit naturally. The astronaut stops, looks toward a distant glow, and says quietly, \"We finally found it.\" Soft wind, distant metallic creaks, and synchronized footsteps fill the soundtrack.",
+    "resolution": "1024x576",
+    "flow_shift": 5.0,
+    "video_length": 241,
+    "input_video_strength": 0.7,
+    "image_prompt_type": "",
+    "audio_prompt_type": "",
+    "sliding_window_size": 241,
+    "sliding_window_overlap": 9,
+    "sliding_window_discard_last_frames": 8,
+    "denoising_strength": 1.0,
+    "num_inference_steps": 8,
+    "guidance_scale": 1.0,
+    "audio_guidance_scale": 1.0,
+    "alt_guidance_scale": 1.0,
+    "alt_scale": 0.0,
+    "guidance_phases": 1,
+    "negative_prompt": ""
+}

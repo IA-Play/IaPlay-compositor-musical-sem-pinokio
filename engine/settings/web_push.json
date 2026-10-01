@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "vapid_private_key": "-----BEGIN PRIVATE KEY-----\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgd8viPekgqc5Rza5X\n/HjEJbjBPw5tssIP/Ib22AljNSKhRANCAASYH08for1Z/bKUklwcJ9JKPZCen+5c\nrGIRUY3jPo6HWtKlSCRvRxHSpMn3zDhyOjzMos4nVDGYU+np9H+WE2Ja\n-----END PRIVATE KEY-----\n",
+  "vapid_public_key": "BJgfTx-ivVn9spSSXBwn0ko9kJ6f7lysYhFRjeM-joda0qVIJG9HEdKkyffMOHI6PMyizidUMZhT6en0f5YTYlo",
+  "subscriptions": []
+}

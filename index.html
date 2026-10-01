@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- CACHE CONTROL -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
+  <!-- BASIC SEO -->
+  <title>IAPLAY | Compositor AI Studio</title>
+  <meta name="description"
+    content="A ferramenta definitiva de composição musical com IA generativa. Controle instrumentos, masterização e ritmo com precisão cirúrgica." />
+  <meta name="keywords"
+    content="Música com IA, Compositor IA, Gerar música, Criar música online, Suno AI, Udio, IA Generativa Musical, Orquestração de prompts, Compositor AI Studio, IAPLAY" />
+  <meta name="author" content="IAPLAY" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://iaplay.app/" />
+
+  <!-- THEME & MOBILE -->
+  <meta name="theme-color" content="#8b5cf6" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- OPEN GRAPH / FACEBOOK / WHATSAPP -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://iaplay.app/" />
+  <meta property="og:title" content="IAPLAY | Compositor Musical AI" />
+  <meta property="og:description"
+    content="A ferramenta definitiva de composição musical com IA generativa. Controle instrumentos e receba hits na primeira tentativa." />
+  <meta property="og:image" content="https://iaplay.app/cover.webp" />
+  <!-- TODO: O usuário deve colocar a imagem cover.webp real no servidor public_html raiz -->
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="IAPLAY" />
+
+  <!-- TWITTER CARDS -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://iaplay.app/" />
+  <meta name="twitter:title" content="IAPLAY | Compositor Musical AI" />
+  <meta name="twitter:description"
+    content="A ferramenta definitiva de composição musical com IA generativa. Controle instrumentos e receba hits na primeira tentativa." />
+  <meta name="twitter:image" content="https://iaplay.app/cover.webp" />
+
+  <!-- BASE PRECONNECTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- JSON-LD SCHEMA STATIC BACKUP -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "IAPLAY Compositor AI Studio",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Web Browser",
+      "url": "https://iaplay.app",
+      "description": "Plataforma avançada para orquestração de prompts musicais com IA generativa. Controle granular de instrumentos, ritmo e masterização.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "BRL",
+        "category": "Freemium"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "1250"
+      }
+    }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#040405', // Suno deep black
+            surface: '#121214', // Suno dark grey card
+            primary: '#ff6b3d', // Suno orange-peach brand accent
+            secondary: '#ff5a5f', // Suno rose accent
+            accent: '#e2b714', // Suno gold
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #040405;
+      color: #e4e4e7;
+    }
+
+    /* Glassmorphism System - Suno/Antigravity Premium */
+    .glass-panel {
+      background: rgba(4, 4, 5, 0.7);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .glass-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 100%);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    }
+
+    .neon-glow {
+      box-shadow: 0 0 40px rgba(255, 107, 61, 0.1);
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    .animate-shimmer {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0) 100%);
+      background-size: 200% 100%;
+      animation: shimmer 3s infinite linear;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #040405;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #1c1c1f;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #28282c;
+    }
+  </style>
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.12.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+  }
+}
+</script>
+
+
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/index.tsx"></script>
+</body>
+
+</html>

@@ -1,0 +1,133 @@
+{
+    "attention_mode": "auto",
+    "transformer_types": [],
+    "transformer_quantization": "int8",
+    "text_encoder_quantization": "int8",
+    "lm_decoder_engine": "",
+    "save_path": "outputs",
+    "image_save_path": "outputs",
+    "compile": "",
+    "metadata_type": "metadata",
+    "boost": 1,
+    "enable_int8_kernels": 1,
+    "clear_file_list": 5,
+    "enable_4k_resolutions": 0,
+    "max_reserved_loras": -1,
+    "vae_config": 0,
+    "profile": 4,
+    "video_profile": 4,
+    "image_profile": 4,
+    "audio_profile": 3,
+    "preload_model_policy": [],
+    "UI_theme": "default",
+    "checkpoints_paths": [
+        "ckpts",
+        "."
+    ],
+    "loras_root": "loras",
+    "save_queue_if_crash": 1,
+    "queue_color_scheme": "pastel",
+    "model_hierarchy_type": 1,
+    "mmaudio_mode": 0,
+    "mmaudio_persistence": 1,
+    "rife_version": "v4",
+    "prompt_enhancer_quantization": "quanto_int8",
+    "prompt_enhancer_temperature": 0.6,
+    "prompt_enhancer_top_p": 0.9,
+    "prompt_enhancer_randomize_seed": true,
+    "audio_save_path": "outputs",
+    "services": {
+        "auto_performance": true,
+        "auto_performance_applied": true,
+        "auto_performance_revision": 3,
+        "auto_performance_defaults": {
+            "video_profile": 4,
+            "image_profile": 4,
+            "audio_profile": 3,
+            "transformer_quantization": "int8",
+            "vae_config": 0,
+            "vram_safety_coefficient": 0.8,
+            "attention_mode": "auto",
+            "compile": ""
+        },
+        "nsfw_mode": false,
+        "nsfw_accepted_at": "2026-09-17T10:32:40.922Z",
+        "civitai_api_key": "95522dd0f4aaa3f5634bb99a5f43cf94",
+        "active_workspace": "default"
+    },
+    "vram_safety_coefficient": 0.8,
+    "matanyone_version": "v1",
+    "video_output_codec": "libx264_8",
+    "video_container": "mp4",
+    "embed_source_images": false,
+    "image_output_codec": "jpeg_95",
+    "audio_output_codec": "aac_128",
+    "audio_stand_alone_output_codec": "wav",
+    "flashvsr_mode": 1,
+    "flashvsr_persistence": 1,
+    "flashvsr_backend": "auto",
+    "flashvsr_topk_ratio": 0.0,
+    "maestro_host_notification_sound_enabled": false,
+    "maestro_host_notification_sound_volume": 50,
+    "notification_sound_enabled": 0,
+    "maestro_model_visibility": {
+        "enabled_models": [
+            "ltx2_22B_distilled_1_1",
+            "ltx2_25",
+            "scail2_14B",
+            "scail2_14B_fast",
+            "scail2_14B_recast_fast",
+            "minimax_h3",
+            "minimax_h3_full",
+            "minimax_h3_vdn",
+            "minimax_h3_vdn_full",
+            "viggle_animate",
+            "minimax_h3_fused_turbo",
+            "minimax_h3_ref2va",
+            "minimax_h3_ref2va_full",
+            "minimax_h3_ref2va_fused_turbo",
+            "yue2",
+            "mmaudio_v2",
+            "krea2_turbo_edit",
+            "qwen_image_21_7B"
+        ],
+        "initialized_mature_models": [
+            "ltx2_22B_10eros",
+            "ltx2_22B_10eros_v14",
+            "ltx2_22B_sulphur2_distilled",
+            "mmaudio_nsfw"
+        ],
+        "defaults_version": 16
+    },
+    "maestro_studio_preferences": {
+        "music_defaults_version": 1,
+        "director_music_model": "yue2",
+        "director_music_clip_seconds": null,
+        "enhance_on_generation_default": false,
+        "generation_mode": "audio",
+        "studio_video_workflow": "frames",
+        "studio_image_workflow": "generate",
+        "audio_sub_mode": "music",
+        "selected_model_per_mode": {
+            "video": "ltx2_25",
+            "image": "krea2_turbo_edit",
+            "tools": "krea2_turbo_edit",
+            "avatar": "scail2_14B_recast_fast",
+            "audio": "yue2"
+        },
+        "selected_model_per_audio_sub_mode": {
+            "speech": "kugelaudio_0_open",
+            "revoice": "kugelaudio_0_open",
+            "music": "yue2"
+        },
+        "director_max_shot_frames_per_model": {},
+        "inference_steps_per_model": {
+            "yue2": 32,
+            "krea2_turbo_edit": 8
+        },
+        "h3_optimizations": {
+            "override_attention": "",
+            "skip_steps_cache_type": ""
+        }
+    }
+}
