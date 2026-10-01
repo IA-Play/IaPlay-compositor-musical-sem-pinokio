@@ -43,10 +43,10 @@ O **IAPLAY Studio** é uma estação de trabalho de áudio e inteligência artif
 ## 🚀 Instalação Rápida
 
 ### No Windows:
-1. Clone o repositório ou baixe o arquivo ZIP da branch `standalone`:
+1. Clone o repositório ou baixe o arquivo ZIP:
    ```bash
-   git clone -b standalone https://github.com/IA-Play/compositor-musical-iaplay.git
-   cd compositor-musical-iaplay
+   git clone https://github.com/IA-Play/IaPlay-compositor-musical-sem-pinokio.git
+   cd IaPlay-compositor-musical-sem-pinokio
    ```
    *(Ou clique em **Code > Download ZIP** no GitHub e extraia a pasta no seu computador)*
 
@@ -58,8 +58,8 @@ O **IAPLAY Studio** é uma estação de trabalho de áudio e inteligência artif
 
 ### No Linux / macOS:
 ```bash
-git clone -b standalone https://github.com/IA-Play/compositor-musical-iaplay.git
-cd compositor-musical-iaplay
+git clone https://github.com/IA-Play/IaPlay-compositor-musical-sem-pinokio.git
+cd IaPlay-compositor-musical-sem-pinokio
 chmod +x instalar.sh iniciar.sh
 ./instalar.sh
 ```
