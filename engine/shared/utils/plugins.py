@@ -8,10 +8,12 @@ import datetime
 from typing import Dict, Any, Optional, List, Union, Set
 from dataclasses import dataclass
 import gradio as gr
-import traceback
 import subprocess
-import git
 import shutil
+try:
+    import git
+except Exception:
+    git = None
 import stat
 import json
 import requests

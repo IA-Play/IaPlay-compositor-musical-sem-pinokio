@@ -6,14 +6,22 @@ import torchvision.transforms.functional as TF
 import torch.nn.functional as F
 import cv2
 import tempfile
-import imageio
+try:
+    import imageio
+except Exception:
+    imageio = None
 import torch
-import decord
+try:
+    import decord
+except Exception:
+    decord = None
 from PIL import Image
 import numpy as np
-from rembg import remove, new_session
 import random
-import ffmpeg
+try:
+    import ffmpeg
+except Exception:
+    ffmpeg = None
 import os
 import tempfile
 import subprocess
@@ -271,6 +279,7 @@ def resize_lanczos(img, h, w, method = None):
     return img
 
 def remove_background(img, session=None):
+    from rembg import remove, new_session
     if session ==None:
         session = new_session() 
     img = Image.fromarray(np.clip(255. * img.movedim(0, -1).cpu().numpy(), 0, 255).astype(np.uint8))
@@ -460,6 +469,7 @@ def calculate_dimensions_and_resize_image(image, canvas_height, canvas_width, fi
 
 def resize_and_remove_background(img_list, budget_width, budget_height, rm_background, any_background_ref, fit_into_canvas = 0, block_size= 16, outpainting_dims = None, outpainting_ratio = "", background_ref_outpainted = True, inpaint_color = 127.5, return_tensor = False, ignore_last_refs = 0, background_removal_color =  [255, 255, 255] ):
     if rm_background:
+        from rembg import remove, new_session
         session = new_session() 
 
     output_list =[]

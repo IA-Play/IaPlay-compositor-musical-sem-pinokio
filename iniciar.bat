@@ -44,17 +44,17 @@ goto :SETUPTOOLS_OK
 uv --native-tls pip install setuptools wheel --python "%PYTHON_EXE%" >nul 2>&1
 :SETUPTOOLS_OK
 
-REM 2.2 Verifica modulos essenciais cv2 (OpenCV) e PIL (Pillow)
-"%PYTHON_EXE%" -c "import cv2, PIL" >nul 2>&1
-if not errorlevel 1 goto :CV2_OK
-echo [IAPLAY] Instalando modulos necessarios (opencv-python, pillow)...
+REM 2.2 Verifica modulos essenciais do motor neural
+"%PYTHON_EXE%" -c "import cv2, PIL, imageio, git, mmgp; assert mmgp.__version__ == '3.7.12'" >nul 2>&1
+if not errorlevel 1 goto :DEPS_OK
+echo [IAPLAY] Atualizando dependencias neurais essenciais...
 where uv >nul 2>&1
-if not errorlevel 1 goto :UV_CV2
-"%PYTHON_EXE%" -m pip install opencv-python-headless pillow >nul 2>&1
-goto :CV2_OK
-:UV_CV2
-uv --native-tls pip install opencv-python-headless pillow --python "%PYTHON_EXE%" >nul 2>&1
-:CV2_OK
+if not errorlevel 1 goto :UV_DEPS
+"%PYTHON_EXE%" -m pip install -r "%SCRIPT_DIR%server\requirements.txt" >nul 2>&1
+goto :DEPS_OK
+:UV_DEPS
+uv --native-tls pip install -r "%SCRIPT_DIR%server\requirements.txt" --python "%PYTHON_EXE%" >nul 2>&1
+:DEPS_OK
 
 REM 3. Verifica Node.js
 where node >nul 2>&1

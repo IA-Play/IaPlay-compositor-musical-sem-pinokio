@@ -2164,7 +2164,10 @@ DEFAULT_LORA_ROOT = "loras"
 def register_family_lora_args(parser, lora_root):
     registered_families = set()
     for path in family_handlers:
-        handler = importlib.import_module(path).family_handler
+        try:
+            handler = importlib.import_module(path).family_handler
+        except Exception:
+            continue
         family_name = handler.query_model_family()
         family_key = family_name or path
         if family_key in registered_families:
@@ -2820,10 +2823,13 @@ _normalize_profile_defaults(server_config)
 _normalize_output_paths(server_config)
 lm_decoder_engine = server_config.get("lm_decoder_engine", "")
 
-from preprocessing.matanyone.utils.model_assets import migrate_matanyone_install, query_matanyone_download_def
-migration_note = migrate_matanyone_install(server_config)
-if migration_note:
-    print(migration_note)
+try:
+    from preprocessing.matanyone.utils.model_assets import migrate_matanyone_install, query_matanyone_download_def
+    migration_note = migrate_matanyone_install(server_config)
+    if migration_note:
+        print(migration_note)
+except Exception:
+    pass
 
 #   Deprecated models
 for path in  ["wan2.1_Vace_1.3B_preview_bf16.safetensors", "sky_reels2_diffusion_forcing_1.3B_bf16.safetensors","sky_reels2_diffusion_forcing_720p_14B_bf16.safetensors",
@@ -2854,7 +2860,10 @@ model_signatures = {"t2v": "text2video_14B", "t2v_1.3B" : "text2video_1.3B",   "
 def map_family_handlers(family_handlers):
     base_types_handlers, families_infos, models_eqv_map, models_comp_map = {}, {"unknown": (100, "Unknown")}, {}, {}
     for path in family_handlers:
-        handler = importlib.import_module(path).family_handler
+        try:
+            handler = importlib.import_module(path).family_handler
+        except Exception:
+            continue
         for model_type in handler.query_supported_types():
             if model_type in base_types_handlers:
                 prev = base_types_handlers[model_type].__name__
