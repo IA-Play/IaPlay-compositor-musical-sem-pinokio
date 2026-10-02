@@ -27,6 +27,27 @@ except ImportError:
     except Exception as _e:
         print(f"[IAPLAY Engine] Aviso ao tentar instalar setuptools automaticamente: {_e}")
 
+# Garante presença de cv2 (opencv) e PIL (pillow) exigidos pelo motor wgp
+try:
+    import cv2
+except ImportError:
+    try:
+        import subprocess
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "opencv-python-headless"])
+        import cv2
+    except Exception as _e:
+        print(f"[IAPLAY Engine] Aviso ao tentar instalar opencv-python-headless automaticamente: {_e}")
+
+try:
+    import PIL
+except ImportError:
+    try:
+        import subprocess
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "pillow"])
+        import PIL
+    except Exception as _e:
+        print(f"[IAPLAY Engine] Aviso ao tentar instalar pillow automaticamente: {_e}")
+
 import re
 import shutil
 import subprocess

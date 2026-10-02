@@ -53,6 +53,18 @@ if errorlevel 1 (
     "%PYTHON_EXE%" -m pip install setuptools wheel >nul 2>&1
 )
 
+REM 2.2 Verifica modulos essenciais cv2 e PIL (usados pelo motor wgp)
+"%PYTHON_EXE%" -c "import cv2, PIL" >nul 2>&1
+if errorlevel 1 (
+    echo [IAPLAY] Instalando modulos necessarios (opencv-python, pillow)...
+    where uv >nul 2>&1
+    if not errorlevel 1 (
+        uv pip install opencv-python-headless pillow --python "%PYTHON_EXE%" >nul 2>&1
+    ) else (
+        "%PYTHON_EXE%" -m pip install opencv-python-headless pillow >nul 2>&1
+    )
+)
+
 REM 3. Verifica Node.js
 where node >nul 2>&1
 if errorlevel 1 (

@@ -1,6 +1,8 @@
 # IAPLAY Studio - Dependências Python para Backend e Motor YuE2
 setuptools>=68.0.0
 wheel
+opencv-python-headless>=4.8.0
+pillow>=10.0.0
 fastapi>=0.110.0
 uvicorn>=0.28.0
 python-multipart>=0.0.9
