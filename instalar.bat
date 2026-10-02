@@ -15,10 +15,10 @@ where node >nul 2>&1
 if not errorlevel 1 goto :NODE_OK
 echo [AVISO] Node.js nao detectado no sistema.
 where winget >nul 2>&1
-if not errorlevel 1 (
-    echo Tentando instalar Node.js automaticamente pelo Windows Package Manager...
-    winget install OpenJS.NodeJS.LTS --silent --accept-package-agreements --accept-source-agreements
-)
+if errorlevel 1 goto :CHECK_NODE_AGAIN
+echo Tentando instalar Node.js automaticamente pelo Windows Package Manager...
+winget install OpenJS.NodeJS.LTS --silent --accept-package-agreements --accept-source-agreements
+:CHECK_NODE_AGAIN
 where node >nul 2>&1
 if errorlevel 1 goto :ERRO_NODE
 :NODE_OK
@@ -32,10 +32,10 @@ where python >nul 2>&1
 if not errorlevel 1 goto :PYTHON_OK
 echo [AVISO] Python nao detectado no sistema.
 where winget >nul 2>&1
-if not errorlevel 1 (
-    echo Tentando instalar Python 3.11 automaticamente pelo Windows Package Manager...
-    winget install Python.Python.3.11 --silent --accept-package-agreements --accept-source-agreements
-)
+if errorlevel 1 goto :CHECK_PYTHON_AGAIN
+echo Tentando instalar Python 3.11 automaticamente pelo Windows Package Manager...
+winget install Python.Python.3.11 --silent --accept-package-agreements --accept-source-agreements
+:CHECK_PYTHON_AGAIN
 where python >nul 2>&1
 if errorlevel 1 goto :ERRO_PYTHON
 :PYTHON_OK
@@ -46,10 +46,15 @@ if exist "%SCRIPT_DIR%env" goto :ENV_JA_EXISTE
 echo.
 echo [1/4] Criando ambiente virtual Python dedicado 'env'...
 where uv >nul 2>&1
-if not errorlevel 1 (
-    uv venv "%SCRIPT_DIR%env" --python 3.11 2>nul || uv venv "%SCRIPT_DIR%env" 2>nul || python -m venv "%SCRIPT_DIR%env"
-    goto :ENV_CRIADO
-)
+if not errorlevel 1 goto :CREATE_ENV_UV
+python -m venv "%SCRIPT_DIR%env"
+goto :ENV_CRIADO
+
+:CREATE_ENV_UV
+uv venv "%SCRIPT_DIR%env" --python 3.11 --seed --native-tls 2>nul
+if exist "%SCRIPT_DIR%env\Scripts\python.exe" goto :ENV_CRIADO
+uv venv "%SCRIPT_DIR%env" --seed --native-tls 2>nul
+if exist "%SCRIPT_DIR%env\Scripts\python.exe" goto :ENV_CRIADO
 python -m venv "%SCRIPT_DIR%env"
 :ENV_CRIADO
 goto :ENV_CHECK_OK
@@ -68,14 +73,14 @@ if errorlevel 1 goto :INSTALAR_PYTORCH_CPU
 
 echo Detectada placa de video NVIDIA. Instalando PyTorch com aceleracao CUDA...
 where uv >nul 2>&1
-if not errorlevel 1 uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 --python "%PYTHON_EXE%"
+if not errorlevel 1 uv --native-tls pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 --python "%PYTHON_EXE%"
 if errorlevel 1 "%PYTHON_EXE%" -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 goto :PYTORCH_OK
 
 :INSTALAR_PYTORCH_CPU
 echo Placa NVIDIA nao detectada. Instalando PyTorch CPU...
 where uv >nul 2>&1
-if not errorlevel 1 uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu --python "%PYTHON_EXE%"
+if not errorlevel 1 uv --native-tls pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu --python "%PYTHON_EXE%"
 if errorlevel 1 "%PYTHON_EXE%" -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 :PYTORCH_OK
 
@@ -83,7 +88,7 @@ REM 5. Instala pacotes do backend (requirements.txt)
 echo.
 echo [3/4] Instalando dependencias do servidor de IA...
 where uv >nul 2>&1
-if not errorlevel 1 uv pip install setuptools wheel opencv-python-headless pillow -r "%SCRIPT_DIR%server\requirements.txt" --python "%PYTHON_EXE%"
+if not errorlevel 1 uv --native-tls pip install setuptools wheel opencv-python-headless pillow -r "%SCRIPT_DIR%server\requirements.txt" --python "%PYTHON_EXE%"
 if errorlevel 1 "%PYTHON_EXE%" -m pip install setuptools wheel opencv-python-headless pillow -r "%SCRIPT_DIR%server\requirements.txt"
 
 REM 6. Instala dependencias do frontend web

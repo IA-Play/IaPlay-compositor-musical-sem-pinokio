@@ -23,10 +23,10 @@ REM 2. Localiza Python
 set "PYTHON_EXE="
 if exist "%SCRIPT_DIR%env\Scripts\python.exe" set "PYTHON_EXE=%SCRIPT_DIR%env\Scripts\python.exe"
 
-if not defined PYTHON_EXE (
-    where python >nul 2>&1
-    if not errorlevel 1 set "PYTHON_EXE=python"
-)
+if defined PYTHON_EXE goto :PYTHON_DEFINIDO
+where python >nul 2>&1
+if not errorlevel 1 set "PYTHON_EXE=python"
+:PYTHON_DEFINIDO
 
 if not defined PYTHON_EXE goto :ERRO_PYTHON
 
@@ -37,11 +37,11 @@ REM 2.1 Verifica modulo essencial setuptools
 if not errorlevel 1 goto :SETUPTOOLS_OK
 echo [IAPLAY] Instalando modulo neural essencial setuptools...
 where uv >nul 2>&1
-if not errorlevel 1 (
-    uv pip install setuptools wheel --python "%PYTHON_EXE%" >nul 2>&1
-) else (
-    "%PYTHON_EXE%" -m pip install setuptools wheel >nul 2>&1
-)
+if not errorlevel 1 goto :UV_SETUPTOOLS
+"%PYTHON_EXE%" -m pip install setuptools wheel >nul 2>&1
+goto :SETUPTOOLS_OK
+:UV_SETUPTOOLS
+uv --native-tls pip install setuptools wheel --python "%PYTHON_EXE%" >nul 2>&1
 :SETUPTOOLS_OK
 
 REM 2.2 Verifica modulos essenciais cv2 (OpenCV) e PIL (Pillow)
@@ -49,11 +49,11 @@ REM 2.2 Verifica modulos essenciais cv2 (OpenCV) e PIL (Pillow)
 if not errorlevel 1 goto :CV2_OK
 echo [IAPLAY] Instalando modulos necessarios (opencv-python, pillow)...
 where uv >nul 2>&1
-if not errorlevel 1 (
-    uv pip install opencv-python-headless pillow --python "%PYTHON_EXE%" >nul 2>&1
-) else (
-    "%PYTHON_EXE%" -m pip install opencv-python-headless pillow >nul 2>&1
-)
+if not errorlevel 1 goto :UV_CV2
+"%PYTHON_EXE%" -m pip install opencv-python-headless pillow >nul 2>&1
+goto :CV2_OK
+:UV_CV2
+uv --native-tls pip install opencv-python-headless pillow --python "%PYTHON_EXE%" >nul 2>&1
 :CV2_OK
 
 REM 3. Verifica Node.js
@@ -75,15 +75,18 @@ REM 6. Inicia servico do Ollama se instalado localmente
 netstat -ano | findstr ":11434 " | findstr "LISTENING" >nul
 if not errorlevel 1 goto :OLLAMA_JA_ATIVO
 where ollama >nul 2>&1
-if not errorlevel 1 (
-    echo [IAPLAY] Iniciando servico Ollama...
-    start /b "" ollama serve >nul 2>&1
-    goto :OLLAMA_JA_ATIVO
-)
-if exist "%LOCALAPPDATA%\Programs\Ollama\ollama.exe" (
-    echo [IAPLAY] Iniciando servico Ollama...
-    start /b "" "%LOCALAPPDATA%\Programs\Ollama\ollama.exe" serve >nul 2>&1
-)
+if not errorlevel 1 goto :START_OLLAMA_CMD
+if exist "%LOCALAPPDATA%\Programs\Ollama\ollama.exe" goto :START_OLLAMA_APP
+goto :OLLAMA_JA_ATIVO
+
+:START_OLLAMA_CMD
+echo [IAPLAY] Iniciando servico Ollama...
+start /b "" ollama serve >nul 2>&1
+goto :OLLAMA_JA_ATIVO
+
+:START_OLLAMA_APP
+echo [IAPLAY] Iniciando servico Ollama...
+start /b "" "%LOCALAPPDATA%\Programs\Ollama\ollama.exe" serve >nul 2>&1
 :OLLAMA_JA_ATIVO
 
 REM 7. Inicia Servidor YuE2 na porta 42024 se nao estiver ativo
