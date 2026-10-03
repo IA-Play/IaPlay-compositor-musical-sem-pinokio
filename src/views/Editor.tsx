@@ -18,6 +18,7 @@ import {
     hasKeyForProvider,
     getProviderKeyUrl,
     parseStructuredPrompt,
+    translateVoiceTypesToEnglish,
     NVIDIA_FREE_MODELS
 } from '../services/aiService';
 import {
@@ -591,7 +592,8 @@ export const Editor: React.FC<EditorProps> = ({ project, setProject, onSave, sav
         } else if (project.lyrics && project.lyrics.trim().length > 0) {
             const userStyles = project.styles || [];
             const arsenalInstruments = project.arsenal?.instruments || [];
-            fullPromptContext = `Title: ${project.title || "Untitled"}\nStyle: ${userStyles.join(', ')}\nAtmosphere/Feeling: ${project.sentiment || "Neutral"}\nInstruments/Arsenal: ${arsenalInstruments.join(', ')}\n\n[LYRICS]\n${project.lyrics}`;
+            const voiceTypes = translateVoiceTypesToEnglish(project.arsenal?.voiceTypes || []);
+            fullPromptContext = `Title: ${project.title || "Untitled"}\nStyle: ${userStyles.join(', ')}\nVocal Profile / Gender: ${voiceTypes.join(', ') || "Natural Vocals"}\nAtmosphere/Feeling: ${project.sentiment || "Neutral"}\nInstruments/Arsenal: ${arsenalInstruments.join(', ')}\n\n[LYRICS]\n${project.lyrics}`;
         } else {
             return;
         }
@@ -1047,6 +1049,17 @@ export const Editor: React.FC<EditorProps> = ({ project, setProject, onSave, sav
                             >
                                 <Database className="w-3 h-3" /> {t('editor.open_arsenal')}
                             </button>
+
+                            {project.arsenal?.voiceTypes && project.arsenal.voiceTypes.length > 0 && (
+                                <div className="flex flex-wrap gap-1 mt-2">
+                                    {project.arsenal.voiceTypes.map((v, i) => (
+                                        <span key={i} className="text-[10px] px-2 py-0.5 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-md flex items-center gap-1 font-medium">
+                                            <Mic2 className="w-2.5 h-2.5" />
+                                            {v}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
                         </section>
 
                         <div className="h-px bg-white/5 w-full" />
