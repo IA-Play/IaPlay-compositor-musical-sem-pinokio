@@ -451,7 +451,9 @@ export const Editor: React.FC<EditorProps> = ({ project, setProject, onSave, sav
                     styles: currentStyles.length > 0 ? currentStyles : prev.styles,
                     promptFinal: result,
                     promptHistory: pHistory,
-                    lyrics: hasNewStructuredLyrics ? parsed.lyricsText : prev.lyrics,
+                    // A letra digitada pelo usuário no painel central "EDITOR DE COMPOSIÇÃO" permanece intacta e pura.
+                    // Apenas o Prompt Final (promptFinal) recebe a estrutura formatada com as metatags.
+                    lyrics: prev.lyrics,
                     lyricsHistory: lHistory,
                     stylePrompt: parsed.styleText || prev.stylePrompt,
                     extractedStyles: updatedExtracted
@@ -524,7 +526,8 @@ export const Editor: React.FC<EditorProps> = ({ project, setProject, onSave, sav
             ...project,
             promptFinal: newPromptFinal,
             promptHistory: pHistory,
-            lyrics: hasNewStructuredLyrics ? parsed.lyricsText : project.lyrics,
+            // Mantém a letra original do usuário inalterada no editor central
+            lyrics: project.lyrics,
             stylePrompt: parsed.styleText || project.stylePrompt,
             extractedStyles: parsed.tags.length > 0 ? parsed.tags : project.extractedStyles
         };

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from '../components/Navbar';
 import { getSystemSettings, saveSystemSettings, resetSystemSettings, initSettings } from '../services/settingsService';
 import { SystemSettings, isUserAdmin } from '../types';
-import { Save, RefreshCw, Sliders, Music, Sparkles, Download, Upload } from 'lucide-react';
+import { Save, RefreshCw, Sliders, Music, Sparkles } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useModal } from '../components/ModalProvider';
@@ -82,59 +82,6 @@ export const Admin: React.FC = () => {
         }
     };
 
-    const handleExportBackup = () => {
-        const parseList = (text: string) => text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
-        const dataToExport: SystemSettings = {
-            ...settings,
-            listInstruments: parseList(rawLists.listInstruments),
-            listStyles: parseList(rawLists.listStyles),
-            listSentiments: parseList(rawLists.listSentiments)
-        };
-        const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `iaplay_backup_prompts_${new Date().toISOString().slice(0, 10)}.json`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    };
-
-    const handleImportBackup = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-            try {
-                const content = e.target?.result as string;
-                const parsed = JSON.parse(content);
-                if (parsed && typeof parsed === 'object') {
-                    const parseList = (text: string) => text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
-                    const merged: SystemSettings = {
-                        ...settings,
-                        ...parsed,
-                        listInstruments: Array.isArray(parsed.listInstruments) ? parsed.listInstruments : parseList(rawLists.listInstruments),
-                        listStyles: Array.isArray(parsed.listStyles) ? parsed.listStyles : parseList(rawLists.listStyles),
-                        listSentiments: Array.isArray(parsed.listSentiments) ? parsed.listSentiments : parseList(rawLists.listSentiments)
-                    };
-                    await saveSystemSettings(merged);
-                    setSettings(merged);
-                    setRawLists({
-                        listInstruments: merged.listInstruments?.join('\n') || '',
-                        listStyles: merged.listStyles?.join('\n') || '',
-                        listSentiments: merged.listSentiments?.join('\n') || ''
-                    });
-                    await showAlert("Backup de Prompts Mestres e Listas importado e salvo com sucesso!");
-                }
-            } catch (err: any) {
-                await showAlert("Erro ao ler o arquivo JSON: " + (err.message || "Formato inválido."));
-            }
-        };
-        reader.readAsText(file);
-        event.target.value = '';
-    };
-
     const handleListTextChange = (key: 'listInstruments' | 'listStyles' | 'listSentiments', value: string) => {
         setRawLists(prev => ({ ...prev, [key]: value }));
     };
@@ -143,7 +90,7 @@ export const Admin: React.FC = () => {
         <div className="min-h-screen bg-background text-white font-sans">
             <Navbar />
             <div className="max-w-7xl mx-auto px-6 py-12">
-                <header className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <header className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <h1 className="text-3xl font-bold flex items-center gap-2">
                             <Sliders className="w-7 h-7 text-primary" />
@@ -151,35 +98,17 @@ export const Admin: React.FC = () => {
                         </h1>
                         <p className="text-zinc-400 text-sm">Personalize os Prompts Mestres de IA e Listas de Produção do IAPLAY Studio.</p>
                     </div>
-                    <div className="flex flex-wrap items-center gap-2">
-                        <label className="cursor-pointer px-3.5 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-xl flex items-center gap-2 text-xs sm:text-sm font-medium transition-colors border border-white/10">
-                            <Upload className="w-4 h-4 text-emerald-400" />
-                            <span>Importar JSON</span>
-                            <input
-                                type="file"
-                                accept=".json,application/json"
-                                onChange={handleImportBackup}
-                                className="hidden"
-                            />
-                        </label>
-                        <button
-                            onClick={handleExportBackup}
-                            className="px-3.5 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-xl flex items-center gap-2 text-xs sm:text-sm font-medium transition-colors border border-white/10"
-                            title="Baixar cópia de segurança de todos os Prompts e Listas em JSON"
-                        >
-                            <Download className="w-4 h-4 text-cyan-400" />
-                            <span>Exportar JSON</span>
-                        </button>
+                    <div className="flex gap-3">
                         <button
                             onClick={handleReset}
-                            className="px-3.5 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-xl flex items-center gap-2 text-xs sm:text-sm font-medium transition-colors border border-white/10"
+                            className="px-4 py-2.5 bg-zinc-800 hover:bg-zinc-700 rounded-xl flex items-center gap-2 text-sm font-medium transition-colors border border-white/10"
                         >
                             <RefreshCw className="w-4 h-4 text-zinc-400" /> Restaurar Padrões
                         </button>
                         <button
                             onClick={handleSave}
                             disabled={savingSettings}
-                            className="px-5 py-2 bg-primary hover:bg-[#e05626] rounded-xl flex items-center gap-2 text-xs sm:text-sm font-bold shadow-lg shadow-primary/20 transition-all disabled:opacity-50"
+                            className="px-6 py-2.5 bg-primary hover:bg-[#e05626] rounded-xl flex items-center gap-2 text-sm font-bold shadow-lg shadow-primary/20 transition-all disabled:opacity-50"
                         >
                             <Save className="w-4 h-4" /> {savingSettings ? "Salvando..." : "Salvar Alterações"}
                         </button>

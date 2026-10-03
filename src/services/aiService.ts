@@ -989,7 +989,7 @@ const ensureArray = (value: any): string[] => {
     return [];
 };
 
-// --- HELPER: Traduz tipos de voz do Arsenal para termos profissionais de áudio em inglês ---
+// --- TRADUÇÃO DOS TIPOS DE VOZ DO ARSENAL PARA INGLÊS ---
 export const translateVoiceTypesToEnglish = (voiceTypes: any): string[] => {
     const arr = ensureArray(voiceTypes);
     const map: Record<string, string> = {
@@ -1015,7 +1015,7 @@ export const translateVoiceTypesToEnglish = (voiceTypes: any): string[] => {
         "Vocal Melancólico e Emocional": "Melancholic Emotional Vocals"
     };
 
-    return arr.map(v => map[v.trim()] || v.trim());
+    return arr.map(v => (typeof v === 'string' && map[v.trim()]) ? map[v.trim()] : String(v).trim()).filter(Boolean);
 };
 
 // --- HELPER TO FORMAT ARSENAL ---
@@ -1027,8 +1027,8 @@ const formatArsenalForPrompt = (arsenal: ArsenalSettings): string => {
     const rhythm = ensureArray(arsenal.rhythm);
     const rawVoiceTypes = ensureArray(arsenal.voiceTypes);
     const englishVoiceTypes = translateVoiceTypesToEnglish(rawVoiceTypes);
-    const voiceSummary = englishVoiceTypes.length > 0 
-        ? englishVoiceTypes.join(", ") 
+    const voiceSummary = englishVoiceTypes.length > 0
+        ? englishVoiceTypes.join(", ")
         : "Free Choice / Natural";
 
     return `
@@ -1213,28 +1213,18 @@ export const structureSunoPrompt = async (
             ? arsenalInstruments.join(", ")
             : (genreHint || "Free Choice / Natural Arrangement");
 
+        const rawVoiceTypes = ensureArray(project.arsenal?.voiceTypes);
+        const englishVoiceTypes = translateVoiceTypesToEnglish(rawVoiceTypes);
+        const vocalInstruction = englishVoiceTypes.length > 0 ? englishVoiceTypes.join(", ") : "";
+
+        const hasFemaleVocal = rawVoiceTypes.some(v => /feminin/i.test(v)) || englishVoiceTypes.some(v => /female/i.test(v));
+        const hasMaleVocal = rawVoiceTypes.some(v => /masculin/i.test(v)) || englishVoiceTypes.some(v => /\bmale\b/i.test(v));
+
         const enrichedArsenal = {
             ...project.arsenal,
             instruments: arsenalInstruments.length > 0 ? arsenalInstruments : (genreHint ? [genreHint] : [])
         };
         const arsenalData = formatArsenalForPrompt(enrichedArsenal);
-
-        const rawVoiceTypes = ensureArray(project.arsenal?.voiceTypes);
-        const englishVoiceTypes = translateVoiceTypesToEnglish(rawVoiceTypes);
-        const vocalInstruction = englishVoiceTypes.length > 0
-            ? englishVoiceTypes.join(", ")
-            : "";
-
-        const hasFemaleVocal = rawVoiceTypes.some(v => /feminin/i.test(v)) || 
-                               englishVoiceTypes.some(v => /female/i.test(v));
-        const hasMaleVocal = rawVoiceTypes.some(v => /masculin/i.test(v)) || 
-                             englishVoiceTypes.some(v => /\bmale\b/i.test(v));
-
-        const vocalDirective = hasFemaleVocal
-            ? `\n- MANDATORY VOCAL GENDER & TIMBRE (ABSOLUTE PRIORITY): 100% FEMALE LEAD VOCALS ("${englishVoiceTypes.join(', ')}"). You MUST explicitly include "Female Lead Vocals" in [PROMPT_GLOBAL]. Every [Production Note: ...] that mentions vocals MUST explicitly specify female vocals (e.g. "powerful soaring female lead vocals", "raspy female vocal delivery"). Under NO circumstances output male vocals or leave vocal gender ambiguous.`
-            : (hasMaleVocal
-                ? `\n- MANDATORY VOCAL GENDER & TIMBRE (ABSOLUTE PRIORITY): 100% MALE LEAD VOCALS ("${englishVoiceTypes.join(', ')}"). You MUST explicitly include "Male Lead Vocals" in [PROMPT_GLOBAL] and in [Production Note: ...] tags.`
-                : (vocalInstruction ? `\n- MANDATORY VOCAL PROFILE: "${vocalInstruction}". Must be included in [PROMPT_GLOBAL] and Production Notes.` : ''));
 
         const platform = project.targetPlatform || MusicPlatform.SUNO;
 
@@ -1305,13 +1295,16 @@ ${detailedInstructions || "No additional specific instructions."}
             prompt += `\n\n[LYRICS]\n${cleanInputLyrics}`;
         }
 
+        const vocalDirective = vocalInstruction
+            ? `- Target Vocal Profile: ${vocalInstruction}. You MUST include "${vocalInstruction}" in [PROMPT_GLOBAL] and describe the vocal delivery in the [Production Note: ...] blocks.`
+            : "";
+
         const dynamicStyleOverrideInstruction = `
 CRITICAL - NEW MUSICAL STYLE, VOCAL PROFILE & RESTRUCTURING ENFORCEMENT:
 - Target Musical Style: ${activeStyles.join(", ")}
-${vocalDirective}
-- Target Atmosphere / Emotion: ${project.sentiment}
+${vocalDirective ? vocalDirective + '\n' : ''}- Target Atmosphere / Emotion: ${project.sentiment}
 - Target Instrumentation: ${combinedInstruments}
-- MANDATORY PRODUCTION NOTES: You MUST generate 100% fresh, authentic [Production Note: ...] for each section strictly adhering to "${activeStyles.join(", ")}"${vocalInstruction ? ' and "' + vocalInstruction + '"' : ''}. NEVER reuse or preserve old instruments or arrangements from another genre.
+- MANDATORY PRODUCTION NOTES: You MUST generate 100% fresh, authentic [Production Note: ...] for each section strictly adhering to "${activeStyles.join(", ")}"${vocalInstruction ? ' and vocal profile "' + vocalInstruction + '"' : ''}. NEVER reuse or preserve old instruments or arrangements from another genre.
 - MANDATORY [PROMPT_GLOBAL]: Must end with the vocal profile and active style keywords: "${vocalInstruction ? vocalInstruction + ', ' : ''}${activeStyles.join(", ")}${project.sentiment && project.sentiment !== 'Neutro' ? ', ' + project.sentiment : ''}". NEVER leave [PROMPT_GLOBAL] empty or ending with a trailing comma.
 - 100% LYRICS PRESERVATION: Every line of the song lyrics must be reproduced word for word with zero omissions.
 `.trim();
@@ -1363,11 +1356,16 @@ CRITICAL INSTRUCTION - ZERO TRUNCATION & 100% LYRIC PRESERVATION:
                 }
             }
 
-            // Injeta a exigência de vocal com alta prioridade caso o modelo tenha omitido do [PROMPT_GLOBAL]
-            if (hasFemaleVocal && !/female|feminin/i.test(globalContent)) {
-                globalContent = `${globalContent}, ${vocalKeywords || "Female Lead Vocals"}`;
-            } else if (hasMaleVocal && !hasFemaleVocal && !/\bmale\b|masculin/i.test(globalContent)) {
-                globalContent = `${globalContent}, ${vocalKeywords || "Male Lead Vocals"}`;
+            // Injeta o perfil vocal no [PROMPT_GLOBAL] caso o modelo tenha omitido
+            if (vocalKeywords) {
+                const vocalLower = vocalKeywords.toLowerCase();
+                const alreadyHasVocal = globalContent.toLowerCase().includes(vocalLower) ||
+                    (hasFemaleVocal && /female/i.test(globalContent)) ||
+                    (hasMaleVocal && /\bmale\b/i.test(globalContent));
+
+                if (!alreadyHasVocal) {
+                    globalContent = `${globalContent}, ${vocalKeywords}`;
+                }
             }
 
             restored = restored.replace(globalMatch[0], `[PROMPT_GLOBAL: ${globalContent}]`);
