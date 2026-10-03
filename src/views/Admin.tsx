@@ -132,7 +132,6 @@ export const Admin: React.FC = () => {
             }
         };
         reader.readAsText(file);
-        // Reseta o input para permitir selecionar o mesmo arquivo novamente
         event.target.value = '';
     };
 
