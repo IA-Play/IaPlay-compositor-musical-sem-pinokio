@@ -239,7 +239,7 @@ const callGoogle = async (prompt: string, systemInstruction?: string): Promise<s
         throw new Error("Nenhuma chave do Google Gemini configurada. Vá em 'Chaves de IA & Ollama' e insira sua chave da Google AI Studio (ou utilize o Ollama 100% grátis).");
     }
 
-    const models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash-lite'];
+    const models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
     let lastError = "";
 
     for (const key of keys) {
@@ -368,7 +368,7 @@ const callOpenRouter = async (prompt: string, systemInstruction?: string): Promi
     }
 
     const models = [
-        'google/gemini-2.0-flash-lite:free',
+        'google/gemini-2.5-flash-lite:free',
         'meta-llama/llama-3.3-70b-instruct:free',
         'deepseek/deepseek-r1:free',
         'qwen/qwen-2.5-coder-32b-instruct',
