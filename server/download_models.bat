@@ -25,5 +25,12 @@ if exist "%~dp0..\env\Scripts\python.exe" (
     set PYTHON_EXE=python
 )
 
+REM 2. Garante que huggingface_hub esta instalado antes do script de download
+"%PYTHON_EXE%" -c "import huggingface_hub" >nul 2>&1
+if errorlevel 1 (
+    echo [IAPLAY Engine] Instalando huggingface_hub...
+    uv pip install --python "%PYTHON_EXE%" huggingface_hub >nul 2>&1 || "%PYTHON_EXE%" -m pip install huggingface_hub
+)
+
 echo [IAPLAY Engine] Executando download com: %PYTHON_EXE%
-"%PYTHON_EXE%" "%~dp0download_models.py"
+"%PYTHON_EXE%" "%~dp0download_models.py" %*

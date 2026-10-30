@@ -375,6 +375,32 @@ export const DEFAULT_SETTINGS: SystemSettings = {
   "tutorialVideoUrl": "https://www.youtube.com/watch?v=60ygy76sKNQ",
   "blogPosts": [
     {
+      "id": "post-atualizacao-v3-5-1-estabilidade-pinokio-correcao-anuncios",
+      "slug": "atualizacao-v3-5-1-estabilidade-pinokio-e-correcoes",
+      "coverImage": "/screenshots/editor_full_workflow.png",
+      "createdAt": "2026-10-30T15:30:00.000Z",
+      "translations": {
+        "pt": {
+          "title": "Atualização v3.5.1: Correção do Launcher Pinokio, Fim do Loop de Instalação e Remoção de Anúncios",
+          "excerpt": "Correção definitiva para o Pinokio: resolução do travamento de cache em módulos ES, correção do instalador de dependências PyTorch CUDA no Windows e remoção completa de scripts de anúncios externos.",
+          "keywords": "IAPLAY Studio, Atualização v3.5.1, Pinokio, Correções, PyTorch CUDA, YuE2, Estabilidade, Sem Anúncios",
+          "content": "<h2>Atualização de Estabilidade: IAPLAY Studio v3.5.1</h2><p>Lançada em <strong>30 de Outubro de 2026</strong>, esta versão traz correções cruciais de integração com o ecossistema Pinokio e remove interferências no navegador.</p><h3>O que foi Corrigido e Melhorado:</h3><ul><li><strong>Fim do Loop de Reinstalação no Pinokio:</strong> O arquivo <code>pinokio.js</code> agora verifica com precisão tanto o marcador de instalação quanto o ambiente virtual real (<code>env</code>) e dependências locais, iniciando o aplicativo direto em vez de pedir para instalar novamente.</li><li><strong>Compatibilidade do Cache CommonJS:</strong> Migração de <code>pinokio.js</code> e arquivos auxiliares para o padrão CommonJS (<code>module.exports</code>), impedindo que o motor do Pinokio congele o menu de instalação na memória RAM do Electron.</li><li><strong>Correção do Script de Instalação no Windows:</strong> Ajustado o comando de instalação do pacote <code>typing-extensions</code> e PyTorch com aspas no shell, impedindo erros de redirecionamento que geravam arquivos com erro e abortavam a instalação.</li><li><strong>Navegação 100% Limpa e Sem Popups:</strong> Remoção completa dos scripts de verificação de anúncios automáticos do Google AdSense da versão desktop/local. O app agora abre com uma única aba limpa e estável.</li><li><strong>Pesos Neurais YuE2 e SheetSage2 Verificados:</strong> Confirmação de integridade dos ~5.5 GB de modelos neurais em <code>ckpts</code> para geração imediata de músicas com aceleração GPU NVIDIA RTX/CUDA e AMD.</li></ul><p>Atualize seu app com 1 clique no menu do Pinokio ou reinicie para usufruir de todas as correções!</p>"
+        },
+        "en": {
+          "title": "Update v3.5.1: Pinokio Launcher Fix, Install Loop Resolved and Ad Scripts Removed",
+          "excerpt": "Definitive Pinokio fix: resolved ES module cache freeze, fixed Windows shell PyTorch CUDA dependency installer, and stripped all auto-ad scripts.",
+          "keywords": "IAPLAY Studio, Update v3.5.1, Pinokio, Fixes, PyTorch CUDA, YuE2, Stability, Ad-free",
+          "content": "<h2>Stability Update: IAPLAY Studio v3.5.1</h2><p>Released on <strong>October 30, 2026</strong>, this version delivers key fixes for the Pinokio ecosystem and cleans up browser tab popups.</p><h3>Key Updates and Fixes:</h3><ul><li><strong>Install Loop Eliminated in Pinokio:</strong> <code>pinokio.js</code> now robustly inspects actual virtual env and installed dependencies, correctly displaying 'Launch IAPLAY' instead of prompting install.</li><li><strong>CommonJS Module Compatibility:</strong> Migrated <code>pinokio.js</code> to CommonJS to prevent Electron RAM module caching locks.</li><li><strong>Windows Shell Setup Quoting Fix:</strong> Properly escaped and quoted dependency requirements in <code>install.json</code> and <code>torch.js</code>.</li><li><strong>Ad-Free Desktop Experience:</strong> Completely removed auto-ad verification scripts from local HTML files, stopping repetitive browser tab popups.</li></ul>"
+        },
+        "es": {
+          "title": "Actualización v3.5.1: Corrección de Pinokio Launcher, Fin del Bucle de Instalación y Sin Anuncios",
+          "excerpt": "Corrección definitiva para Pinokio: resolución del bloqueo de caché en módulos ES, corrección del instalador en Windows y eliminación total de scripts de anuncios.",
+          "keywords": "IAPLAY Studio, Actualización v3.5.1, Pinokio, Correcciones, PyTorch CUDA, YuE2, Estabilidad, Sin Anuncios",
+          "content": "<h2>Actualización de Estabilidade: IAPLAY Studio v3.5.1</h2><p>Publicada el <strong>30 de Octubre de 2026</strong> con correcciones esenciales para el entorno de Pinokio.</p><h3>Mejoras y Correcciones:</h3><ul><li><strong>Fin del Bucle de Instalación:</strong> Detección precisa del estado instalado sin volver a pedir instalación.</li><li><strong>Compatibilidad de Caché CommonJS:</strong> El menú de Pinokio se actualiza dinámicamente sin quedar retenido en memoria.</li><li><strong>Corrección de Comandos en Windows:</strong> Sintaxis corregida en los scripts de instalación de PyTorch y dependencias.</li><li><strong>Sin Pestañas Extra ni Anuncios:</strong> Eliminados los scripts de anuncios automáticos de la versión local.</li></ul>"
+        }
+      }
+    },
+    {
       "id": "post-atualizacao-v3-5-0-gerador-yue2-multilingue-correcoes",
       "slug": "atualizacao-v3-5-0-gerador-yue2-multilingue-correcoes",
       "coverImage": "/screenshots/editor_full_workflow.png",

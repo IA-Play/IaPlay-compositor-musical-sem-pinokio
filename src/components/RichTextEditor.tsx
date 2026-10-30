@@ -1,6 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { Bold, Italic, Underline, List, ListOrdered, Image as ImageIcon, Link as LinkIcon, Heading1, Heading2, AlignLeft, AlignCenter, AlignRight, Type, Palette, Eraser } from 'lucide-react';
+import { useModal } from './ModalProvider';
 
 interface RichTextEditorProps {
     value: string;
@@ -10,6 +11,7 @@ interface RichTextEditorProps {
 }
 
 export const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, placeholder, className }) => {
+    const { showAlert, showPrompt } = useModal();
     const contentRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const isInitialMount = useRef(true);
@@ -57,13 +59,13 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange,
                 if (img) img.remove();
                 exec('insertHTML', `<img src="${data.url}" style="max-width:100%; border-radius: 8px; margin: 10px 0;" />`);
             } else {
-                alert('Erro upload: ' + data.error);
+                await showAlert('Erro upload: ' + data.error);
                 const img = contentRef.current?.querySelector('#loading-img');
                 if (img) img.remove();
             }
         } catch (err) {
             console.error(err);
-            alert('Erro ao enviar imagem.');
+            await showAlert('Erro ao enviar imagem.');
         }
 
         if (fileInputRef.current) fileInputRef.current.value = '';
@@ -111,9 +113,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange,
                 <div className="w-px bg-white/10 mx-1 h-6 self-center" />
                 <button
                     type="button"
-                    onMouseDown={(e) => {
+                    onMouseDown={async (e) => {
                         e.preventDefault();
-                        const url = prompt('URL do Link:');
+                        const url = await showPrompt('URL do Link:');
                         if (url) exec('createLink', url);
                     }}
                     className="p-1.5 hover:bg-white/10 rounded text-zinc-400 hover:text-white"
@@ -150,4 +152,3 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange,
         </div>
     );
 };
-

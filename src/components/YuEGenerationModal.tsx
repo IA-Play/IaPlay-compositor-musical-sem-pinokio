@@ -527,11 +527,31 @@ export const YuEGenerationModal: React.FC<YuEGenerationModalProps> = ({
                             </div>
                             <div>
                                 <div className="flex items-center gap-2">
-                                    <h2 className="text-base md:text-lg font-bold text-white flex items-center gap-2">
+                                    <h2 className="text-base md:text-lg font-bold text-white flex items-center gap-2 flex-wrap">
                                         {t('yue.title')}
                                         <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30 font-mono font-bold">
                                             {t('yue.badge')}
                                         </span>
+                                        {maestroStatus.online && maestroStatus.gpu && (
+                                            <span
+                                                title={maestroStatus.gpu}
+                                                className={`text-[10px] px-2 py-0.5 rounded-full border font-mono font-semibold truncate max-w-[220px] ${
+                                                    maestroStatus.gpuVendor === 'nvidia'
+                                                        ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                                                        : maestroStatus.gpuVendor === 'amd'
+                                                        ? 'bg-rose-500/15 text-rose-300 border-rose-500/30'
+                                                        : maestroStatus.gpuVendor === 'apple'
+                                                        ? 'bg-sky-500/15 text-sky-300 border-sky-500/30'
+                                                        : 'bg-zinc-500/15 text-zinc-300 border-zinc-500/30'
+                                                }`}
+                                            >
+                                                {maestroStatus.gpuVendor === 'amd'
+                                                    ? `AMD ${maestroStatus.backend || 'DirectML/ROCm'}`
+                                                    : maestroStatus.gpuVendor === 'nvidia'
+                                                    ? `NVIDIA ${maestroStatus.backend || 'CUDA'}`
+                                                    : maestroStatus.gpu}
+                                            </span>
+                                        )}
                                     </h2>
                                 </div>
                                 <p className="text-xs text-zinc-400">

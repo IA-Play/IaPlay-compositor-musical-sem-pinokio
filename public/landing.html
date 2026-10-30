@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IAPLAY Studio — Estúdio de Letras & Prompts Musicais com IA (Suno, Udio & Mureka)</title>
+  
+  <meta name="description" content="O copiloto definitivo de composição musical e engenharia de prompts com IA. Estruture letras com metatags [Verse, Chorus, Drop] e gere prompts sonoros de alta fidelidade para Suno, Udio e Mureka. Disponível no Pinokio." />
+  <meta name="keywords" content="IAPLAY, Pinokio, Suno AI, Udio, Mureka, Prompts Musicais, Compositor IA, Letras de Música IA, Engenharia de Prompts, Ollama, Gemini" />
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="IAPLAY Studio — Estúdio de Letras & Prompts Musicais com IA" />
+  <meta property="og:description" content="Crie letras com metatags perfeitas e prompts sonoros para Suno AI, Udio e Mureka. 100% 1-Click no Pinokio!" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://pinokio.co/posts/01m0jmva8zw723vmywwp8jvk35" />
+  
+  <!-- Fonts & Tailwind CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: '#ff6b3d',
+              secondary: '#ff5a5f',
+              accent: '#8b5cf6',
+              gold: '#e2b714',
+              emerald: '#10b981',
+              dark: '#050507',
+              card: '#0d0d12',
+              border: '#1f1f2e'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          animation: {
+            'glow-pulse': 'glowPulse 4s ease-in-out infinite alternate',
+            'shimmer': 'shimmer 2.5s infinite',
+            'float': 'float 6s ease-in-out infinite'
+          },
+          keyframes: {
+            glowPulse: {
+              '0%': { opacity: '0.3', transform: 'scale(0.95)' },
+              '100%': { opacity: '0.8', transform: 'scale(1.05)' }
+            },
+            shimmer: {
+              '0%': { transform: 'translateX(-100%)' },
+              '100%': { transform: 'translateX(100%)' }
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' }
+            }
+          }
+        }
+      }
+    };
+  </script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    body {
+      background-color: #050507;
+      color: #f3f4f6;
+      overflow-x: hidden;
+    }
+    .glass-panel {
+      background: rgba(13, 13, 18, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .glass-card:hover {
+      border-color: rgba(255, 107, 61, 0.35);
+      box-shadow: 0 10px 40px -10px rgba(255, 107, 61, 0.15);
+    }
+    .pinokio-glow {
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.3), 0 0 60px rgba(139, 92, 246, 0.2);
+    }
+    .brand-glow {
+      box-shadow: 0 0 35px rgba(255, 107, 61, 0.35);
+    }
+    .text-gradient {
+      background: linear-gradient(135deg, #ff6b3d 0%, #ff5a5f 50%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .text-pinokio-gradient {
+      background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050507;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f1f2e;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ff6b3d;
+    }
+  </style>
+</head>
+<body class="selection:bg-brand-primary/30 selection:text-white font-sans antialiased">
+
+  <!-- ==================== HEADER / NAVBAR ==================== -->
+  <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass-panel border-b border-white/5 py-4 px-6 md:px-12">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-primary to-brand-secondary flex items-center justify-center shadow-[0_0_20px_rgba(255,107,61,0.4)] group-hover:scale-105 transition-transform">
+          <i data-lucide="music-4" class="w-5 h-5 text-white"></i>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5">
+            IAPLAY <span class="text-xs px-2 py-0.5 rounded-full bg-brand-primary/20 text-brand-primary border border-brand-primary/30 font-bold uppercase tracking-wider">Studio</span>
+          </span>
+          <span class="text-[10px] text-zinc-400 font-medium tracking-wide">Compositor Musical com IA</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-8 text-sm font-medium text-zinc-400">
+        <a href="#como-funciona" class="hover:text-white transition-colors flex items-center gap-1.5">
+          <i data-lucide="sparkles" class="w-4 h-4 text-brand-primary"></i> Como Funciona
+        </a>
+        <a href="#recursos" class="hover:text-white transition-colors flex items-center gap-1.5">
+          <i data-lucide="layers" class="w-4 h-4 text-brand-secondary"></i> Recursos
+        </a>
+        <a href="#arsenal" class="hover:text-white transition-colors flex items-center gap-1.5">
+          <i data-lucide="sliders" class="w-4 h-4 text-brand-accent"></i> Arsenal Sonoro
+        </a>
+        <a href="#comparativo" class="hover:text-white transition-colors flex items-center gap-1.5">
+          <i data-lucide="git-compare" class="w-4 h-4 text-brand-emerald"></i> Comparativo
+        </a>
+        <a href="#screenshots" class="hover:text-white transition-colors flex items-center gap-1.5">
+          <i data-lucide="layout" class="w-4 h-4 text-brand-gold"></i> Galeria
+        </a>
+        <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-3">
+        <!-- Pinokio Download Button -->
+        <a href="https://pinokio.co/posts/01m0jmva8zw723vmywwp8jvk35" target="_blank" rel="noopener noreferrer" 
+           class="group relative inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full font-bold text-sm text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all duration-300 shadow-[0_0_20px_rgba(59,130,246,0.35)] hover:scale-105 active:scale-95 overflow-hidden">
+          <span class="absolute inset-0 w-full h-full -ml-[100%] bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-shimmer"></span>
+          <i data-lucide="download-cloud" class="w-4 h-4 text-white animate-bounce"></i>
+          <span>Baixar no Pinokio</span>
+          <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-70 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="relative min-h-screen pt-36 pb-24 px-6 md:px-12 flex flex-col items-center justify-center text-center overflow-hidden">
+    
+    <!-- Background Animated Glow Spheres -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] md:w-[1100px] h-[500px] bg-gradient-to-tr from-brand-primary/20 via-brand-accent/20 to-blue-600/10 blur-[150px] rounded-full pointer-events-none -z-10 animate-glow-pulse"></div>
+    <div class="absolute bottom-10 left-10 w-96 h-96 bg-brand-secondary/10 blur-[130px] rounded-full pointer-events-none -z-10"></div>
+    <div class="absolute top-20 right-10 w-96 h-96 bg-blue-500/10 blur-[130px] rounded-full pointer-events-none -z-10"></div>
+
+    <div class="max-w-5xl mx-auto space-y-8 relative z-10">
+      
+      <!-- Top Badge / Release Pill -->
+      <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-panel border border-white/10 text-xs font-semibold uppercase tracking-wider text-zinc-300 shadow-xl">
+        <span class="flex h-2.5 w-2.5 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-primary opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-primary"></span>
+        </span>
+        <span>Lançamento Oficial no Pinokio Ecosystem</span>
+        <span class="text-zinc-500">•</span>
+        <span class="text-brand-gold font-bold">v3.3.1 Pronta</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.08] text-white">
+        O Estúdio Definitivo de <br />
+        <span class="text-gradient">Letras & Prompts Musicais</span> <br />
+        para IAs de Áudio
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-lg sm:text-xl md:text-2xl text-zinc-400 max-w-3xl mx-auto font-light leading-relaxed">
+        Pare de queimar créditos no <span class="text-white font-medium">Suno AI</span>, <span class="text-white font-medium">Udio</span> e <span class="text-white font-medium">Mureka</span> com resultados aleatórios. Estruture letras com metatags precisas, extraia DNA sônico e comande a IA com precisão cirúrgica.
+      </p>
+
+      <!-- Hero Call-to-Actions -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
+        
+        <!-- Primary Button: Pinokio Download Post -->
+        <a href="https://pinokio.co/posts/01m0jmva8zw723vmywwp8jvk35" target="_blank" rel="noopener noreferrer"
+           class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-lg flex items-center justify-center gap-3 shadow-[0_0_35px_rgba(59,130,246,0.4)] hover:scale-105 active:scale-95 transition-all duration-300 group">
+          <div class="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center">
+            <i data-lucide="download" class="w-4 h-4 text-white"></i>
+          </div>
+          <div class="text-left">
+            <div class="text-[11px] text-blue-200 uppercase font-bold tracking-wider leading-none">Instalação 1-Click</div>
+            <div class="text-base font-extrabold leading-tight">Baixar no Pinokio</div>
+          </div>
+          <i data-lucide="arrow-right" class="w-5 h-5 text-white group-hover:translate-x-1 transition-transform ml-1"></i>
+        </a>
+
+        <!-- Secondary Button: Explore Features -->
+        <a href="#recursos" 
+           class="w-full sm:w-auto px-8 py-4 rounded-2xl glass-panel hover:bg-white/10 text-white font-bold text-base flex items-center justify-center gap-2 border border-white/10 hover:border-white/20 transition-all duration-200">
+          <i data-lucide="sparkles" class="w-5 h-5 text-brand-primary"></i>
+          <span>Explorar Tudo o que Ele Faz</span>
+        </a>
+
+      </div>
+
+      <!-- Trust Badges Under CTA -->
+      <div class="pt-4 flex flex-wrap items-center justify-center gap-6 text-xs text-zinc-400 font-medium">
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-emerald"></i>
+          <span>100% Gratuito & Open Launcher</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-emerald"></i>
+          <span>IA Local via Ollama (Sem Custos de API)</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-emerald"></i>
+          <span>Compatível com Google Gemini 2.5</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-emerald"></i>
+          <span>Instalação Automática Node.js + Vite</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Floating Interactive App Preview Box -->
+    <div class="max-w-5xl mx-auto w-full mt-16 relative z-10">
+      <div class="relative rounded-3xl p-1 bg-gradient-to-b from-white/15 via-white/5 to-transparent shadow-2xl">
+        <div class="rounded-[22px] bg-[#09090e] border border-white/10 overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+          
+          <!-- Mockup Window Header -->
+          <div class="flex items-center justify-between px-6 py-4 bg-[#0e0e15] border-b border-white/5">
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+              <span class="text-xs text-zinc-400 font-mono ml-2 flex items-center gap-1">
+                <i data-lucide="terminal" class="w-3.5 h-3.5 text-brand-primary"></i> iaplay-studio // editor-mode
+              </span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-[11px] font-mono text-zinc-500 bg-black/40 px-2.5 py-1 rounded-md border border-white/5">
+                Target: Suno v3.5 / Udio v1.5 / Mureka
+              </span>
+            </div>
+          </div>
+
+          <!-- Mockup Content Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-0">
+            
+            <!-- Left: Lyrics & Metatags -->
+            <div class="md:col-span-7 p-6 sm:p-8 text-left font-mono text-xs sm:text-sm border-b md:border-b-0 md:border-r border-white/5 bg-black/40 space-y-3">
+              <div class="flex items-center justify-between text-zinc-500 text-xs pb-2 border-b border-white/5">
+                <span class="font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
+                  <i data-lucide="file-text" class="w-4 h-4 text-brand-primary"></i> Letra Estruturada com Metatags
+                </span>
+                <span class="text-brand-emerald text-[11px]">● Métrica Otimizada</span>
+              </div>
+              
+              <div class="space-y-2 text-zinc-300 leading-relaxed font-mono">
+                <div class="text-purple-400 font-bold bg-purple-950/30 px-2 py-1 rounded border border-purple-800/40 inline-block">[Intro: Atmospheric Synth, Soft Vinyl Crackle, 115 BPM]</div>
+                <div class="text-zinc-500 italic text-xs">// Harmonia suave construindo tensão gradativa</div>
+                
+                <div class="text-brand-primary font-bold mt-3 block">[Verse 1] (Male Vocals, Intimate, Dry Reverb)</div>
+                <p class="text-zinc-300 pl-3 border-l-2 border-brand-primary/40">
+                  Luzes neon piscando na avenida vazia,<br />
+                  O tempo corre rápido em cada esquina fria.<br />
+                  Promessas de silício que tentam me guiar,<br />
+                  Mas no reflexo do vidro só vejo o seu olhar.
+                </p>
+
+                <div class="text-yellow-400 font-bold mt-3 block">[Pre-Chorus] (Rising Drums, Sidechain Build-up)</div>
+                <p class="text-zinc-300 pl-3 border-l-2 border-yellow-400/40">
+                  O pulso acelera, a frequência vai subir,<br />
+                  Não resta mais espaço para desistir!
+                </p>
+
+                <div class="text-brand-secondary font-bold mt-3 block">[Chorus] (Explosive Drop, Distorted 808 Bass, Anthemic Vocals)</div>
+                <p class="text-white font-semibold pl-3 border-l-2 border-brand-secondary/70">
+                  SOMOS O ECO NA ESCURIDÃO!<br />
+                  BATIDAS QUE QUEBRAM A GRAVIDADE NO CHÃO!
+                </p>
+                
+                <div class="text-blue-400 font-bold mt-3 block">[Guitar Solo: Heavy Overdrive, High Energy, Stereo Delay]</div>
+                <div class="text-zinc-500 italic text-xs">[Outro: Fading Synths, Heartbeat Bass]</div>
+              </div>
+            </div>
+
+            <!-- Right: Style Prompt & Copilot -->
+            <div class="md:col-span-5 p-6 sm:p-8 text-left flex flex-col justify-between bg-[#0b0b10] space-y-6">
+              
+              <div>
+                <div class="flex items-center justify-between text-zinc-500 text-xs pb-2 border-b border-white/5 mb-4">
+                  <span class="font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
+                    <i data-lucide="sliders" class="w-4 h-4 text-brand-secondary"></i> Prompt de Estilo Gerado
+                  </span>
+                  <span class="text-xs text-brand-gold font-bold">Alta Fidelidade</span>
+                </div>
+
+                <div class="p-4 rounded-xl bg-black/60 border border-white/10 font-mono text-xs text-zinc-300 space-y-2 relative">
+                  <div class="text-zinc-400 text-[10px] uppercase tracking-wider font-bold">Tags Prontas para Suno / Udio:</div>
+                  <p class="text-brand-primary leading-relaxed">
+                    synthwave rock, anthemic vocals, explosive 808 drop, analog synthesizer, cassette tape hiss, sidechain compression, 115 bpm, key of D minor, stadium reverb, modern studio master
+                  </p>
+                </div>
+
+                <div class="mt-4 space-y-2">
+                  <div class="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Parâmetros Ativos:</div>
+                  <div class="flex flex-wrap gap-1.5">
+                    <span class="px-2 py-1 bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-md text-[11px] font-medium">BPM: 115</span>
+                    <span class="px-2 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-md text-[11px] font-medium">Tom: D Minor</span>
+                    <span class="px-2 py-1 bg-brand-primary/10 text-brand-primary border border-brand-primary/20 rounded-md text-[11px] font-medium">Vibe: Épico / Dark</span>
+                    <span class="px-2 py-1 bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 rounded-md text-[11px] font-medium">Anti-Alucinação ON</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action buttons inside preview -->
+              <div class="pt-4 border-t border-white/5 space-y-2">
+                <button onclick="copyDemoPrompt()" id="copy-demo-btn" 
+                        class="w-full py-3 px-4 rounded-xl bg-white text-black font-bold text-xs sm:text-sm flex items-center justify-center gap-2 hover:bg-zinc-200 transition-colors shadow-lg cursor-pointer">
+                  <i data-lucide="copy" class="w-4 h-4"></i>
+                  <span id="copy-btn-text">Copiar Letra + Prompt com 1 Clique</span>
+                </button>
+                <div class="text-[10px] text-zinc-500 text-center">Cole direto no Suno AI, Udio ou Mureka e crie hits!</div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ==================== IAS DE MÚSICA SUPORTADAS ==================== -->
+  <section class="py-12 bg-black/80 border-y border-white/5 relative z-20">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <p class="text-xs uppercase tracking-widest text-zinc-500 font-bold mb-8">
+        Engenharia de Prompt compatível e testada com os maiores motores de áudio do mundo
+      </p>
+      
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 items-center justify-center">
+        
+        <!-- Suno -->
+        <div class="glass-card p-4 rounded-2xl flex flex-col items-center gap-2 group hover:border-brand-primary/40 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-brand-primary/10 flex items-center justify-center text-brand-primary font-black text-lg border border-brand-primary/20 group-hover:scale-110 transition-transform">
+            S
+          </div>
+          <span class="font-bold text-sm text-zinc-300 group-hover:text-white">Suno AI</span>
+          <span class="text-[10px] text-zinc-500">v3.5 & v4.0</span>
+        </div>
+
+        <!-- Udio -->
+        <div class="glass-card p-4 rounded-2xl flex flex-col items-center gap-2 group hover:border-cyan-500/40 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 font-black text-lg border border-cyan-500/20 group-hover:scale-110 transition-transform">
+            U
+          </div>
+          <span class="font-bold text-sm text-zinc-300 group-hover:text-white">Udio AI</span>
+          <span class="text-[10px] text-zinc-500">v1.5 Clipes & 32kHz</span>
+        </div>
+
+        <!-- Mureka -->
+        <div class="glass-card p-4 rounded-2xl flex flex-col items-center gap-2 group hover:border-purple-500/40 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 font-black text-lg border border-purple-500/20 group-hover:scale-110 transition-transform">
+            M
+          </div>
+          <span class="font-bold text-sm text-zinc-300 group-hover:text-white">Mureka</span>
+          <span class="text-[10px] text-zinc-500">Música Comercial</span>
+        </div>
+
+        <!-- Stable Audio -->
+        <div class="glass-card p-4 rounded-2xl flex flex-col items-center gap-2 group hover:border-yellow-500/40 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center text-yellow-400 font-black text-lg border border-yellow-500/20 group-hover:scale-110 transition-transform">
+            SA
+          </div>
+          <span class="font-bold text-sm text-zinc-300 group-hover:text-white">Stable Audio</span>
+          <span class="text-[10px] text-zinc-500">Stability AI</span>
+        </div>
+
+        <!-- Google Gemini -->
+        <div class="glass-card p-4 rounded-2xl flex flex-col items-center gap-2 group hover:border-blue-500/40 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 font-black text-lg border border-blue-500/20 group-hover:scale-110 transition-transform">
+            G
+          </div>
+          <span class="font-bold text-sm text-zinc-300 group-hover:text-white">Google Gemini</span>
+          <span class="text-[10px] text-zinc-500">Flash & Pro Cloud</span>
+        </div>
+
+        <!-- Ollama Local -->
+        <div class="glass-card p-4 rounded-2xl flex flex-col items-center gap-2 group hover:border-brand-emerald/40 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-brand-emerald/10 flex items-center justify-center text-brand-emerald font-black text-lg border border-brand-emerald/20 group-hover:scale-110 transition-transform">
+            🦙
+          </div>
+          <span class="font-bold text-sm text-zinc-300 group-hover:text-white">Ollama Local</span>
+          <span class="text-[10px] text-zinc-500">100% Offline & Grátis</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== COMO FUNCIONA ==================== -->
+  <section id="como-funciona" class="py-24 px-6 md:px-12 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="text-center max-w-3xl mx-auto mb-20 space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-primary/10 text-brand-primary text-xs font-bold uppercase tracking-wider border border-brand-primary/20">
+          <i data-lucide="zap" class="w-3.5 h-3.5"></i> Fluxo Inteligente em 3 Etapas
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          Como o IAPLAY Studio Transforma suas Ideias em Hits
+        </h2>
+        <p class="text-zinc-400 text-base sm:text-lg">
+          O IAPLAY atua como o seu produtor executivo e engenheiro de prompts, garantindo que o Suno, Udio e Mureka executem com fidelidade máxima.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        
+        <!-- Step 1 -->
+        <div class="glass-card rounded-3xl p-8 relative flex flex-col justify-between group">
+          <div class="space-y-4">
+            <div class="w-14 h-14 rounded-2xl bg-brand-primary/10 border border-brand-primary/30 flex items-center justify-center text-brand-primary font-black text-2xl group-hover:scale-110 transition-transform">
+              01
+            </div>
+            <h3 class="text-2xl font-bold text-white">Direção & Wizard Criativo</h3>
+            <p class="text-zinc-400 text-sm leading-relaxed">
+              Defina o tema, gênero, vibe emocional (romântico, sombrio, épico, alegre), andamento BPM, tonalidade e artistas de referência para canalizar o DNA sônico da música.
+            </p>
+          </div>
+          <div class="mt-6 pt-6 border-t border-white/5 flex items-center gap-2 text-xs text-brand-primary font-semibold">
+            <i data-lucide="check" class="w-4 h-4"></i> Mapeamento Emocional Guiado
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="glass-card rounded-3xl p-8 relative flex flex-col justify-between group border-brand-secondary/30">
+          <div class="space-y-4">
+            <div class="w-14 h-14 rounded-2xl bg-brand-secondary/10 border border-brand-secondary/30 flex items-center justify-center text-brand-secondary font-black text-2xl group-hover:scale-110 transition-transform">
+              02
+            </div>
+            <h3 class="text-2xl font-bold text-white">Composição & Metatags</h3>
+            <p class="text-zinc-400 text-sm leading-relaxed">
+              O motor de IA escreve letras com rimas ricas e métrica calculada, injetando metatags industriais <code class="text-brand-primary">[Verse]</code>, <code class="text-brand-secondary">[Chorus]</code>, <code class="text-purple-400">[Drop]</code> e instruindo a instrumentação exata.
+            </p>
+          </div>
+          <div class="mt-6 pt-6 border-t border-white/5 flex items-center gap-2 text-xs text-brand-secondary font-semibold">
+            <i data-lucide="check" class="w-4 h-4"></i> Estrutura Anti-Alucinação
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="glass-card rounded-3xl p-8 relative flex flex-col justify-between group">
+          <div class="space-y-4">
+            <div class="w-14 h-14 rounded-2xl bg-brand-accent/10 border border-brand-accent/30 flex items-center justify-center text-brand-accent font-black text-2xl group-hover:scale-110 transition-transform">
+              03
+            </div>
+            <h3 class="text-2xl font-bold text-white">Cópia Rápida & Geração</h3>
+            <p class="text-zinc-400 text-sm leading-relaxed">
+              Com 1 clique, copie a letra estruturada e o prompt de estilo. Cole nas caixas de texto do Suno AI, Udio ou Mureka e gere faixas perfeitas sem desperdiçar créditos!
+            </p>
+          </div>
+          <div class="mt-6 pt-6 border-t border-white/5 flex items-center gap-2 text-xs text-brand-accent font-semibold">
+            <i data-lucide="check" class="w-4 h-4"></i> 1-Clique Direto para o Suno/Udio
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== TUDO O QUE SE PODE FAZER (RECURSOS COMPLETOS) ==================== -->
+  <section id="recursos" class="py-24 px-6 md:px-12 bg-[#08080d] border-y border-white/5 relative">
+    <div class="max-w-7xl mx-auto space-y-20">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-emerald/10 text-brand-emerald text-xs font-bold uppercase tracking-wider border border-brand-emerald/20">
+          <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Arsenal Completo de Produção
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          Tudo o Que Você Pode Fazer com o IAPLAY Studio
+        </h2>
+        <p class="text-zinc-400 text-base sm:text-lg">
+          Cada recurso foi projetado para eliminar as limitações das IAs musicais e colocar o controle total nas mãos do compositor.
+        </p>
+      </div>
+
+      <!-- Feature Grid: 9 Comprehensive Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- 1. Wizard de Composição -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 hover:border-brand-primary/40 transition-all flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-brand-primary/10 flex items-center justify-center text-brand-primary border border-brand-primary/20">
+            <i data-lucide="wand-2" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white">1. Wizard de Criação Guiada</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed flex-1">
+            Crie faixas do zero em segundos. Escolha entre dezenas de vibes emocionais (Alegre, Sombrio, Melancólico, Épico, Romântico, Hard), configure o andamento em BPM e a escala tonal sugerida.
+          </p>
+          <div class="text-xs text-brand-primary font-mono bg-brand-primary/5 p-2.5 rounded-xl border border-brand-primary/10">
+            ✨ Direcionamento harmônico inteligente
+          </div>
+        </div>
+
+        <!-- 2. Editor de Metatags -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 hover:border-brand-secondary/40 transition-all flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-brand-secondary/10 flex items-center justify-center text-brand-secondary border border-brand-secondary/20">
+            <i data-lucide="file-code" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white">2. Injeção de Metatags de Áudio</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed flex-1">
+            Formatação precisa de tags suportadas pelo Suno e Udio: <code class="text-purple-400">[Intro]</code>, <code class="text-brand-primary">[Verse]</code>, <code class="text-yellow-400">[Pre-Chorus]</code>, <code class="text-brand-secondary">[Chorus]</code>, <code class="text-blue-400">[Bridge]</code>, <code class="text-red-400">[Drop]</code>, <code class="text-emerald-400">[Guitar Solo]</code> e <code class="text-zinc-400">[Outro]</code>.
+          </p>
+          <div class="text-xs text-brand-secondary font-mono bg-brand-secondary/5 p-2.5 rounded-xl border border-brand-secondary/10">
+            🏷️ Evita alucinações vocais e cortes secos
+          </div>
+        </div>
+
+        <!-- 3. Métrica & Sílabas Poéticas -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 hover:border-brand-accent/40 transition-all flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-brand-accent/10 flex items-center justify-center text-brand-accent border border-brand-accent/20">
+            <i data-lucide="music" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white">3. Métrica Poética & Esquema de Rimas</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed flex-1">
+            Crie letras com cadência e flow naturais. O sistema calcula a contagem silábica para casar perfeitamente com o andamento musical sem soar truncado ou robotizado.
+          </p>
+          <div class="text-xs text-brand-accent font-mono bg-brand-accent/5 p-2.5 rounded-xl border border-brand-accent/10">
+            🎤 Letras que cantam sozinhas no ritmo
+          </div>
+        </div>
+
+        <!-- 4. DNA Sônico de Artistas -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 hover:border-blue-500/40 transition-all flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/20">
+            <i data-lucide="fingerprint" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white">4. Extração de DNA Sônico</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed flex-1">
+            Digite o nome de qualquer artista ou banda de referência (ex: The Weeknd, Linkin Park, Daft Punk, Hans Zimmer) e a IA decodifica timbres, arranjos e mixagem em comandos aplicáveis.
+          </p>
+          <div class="text-xs text-blue-400 font-mono bg-blue-500/5 p-2.5 rounded-xl border border-blue-500/10">
+            🧬 Tradução de influências em tags práticas
+          </div>
+        </div>
+
+        <!-- 5. Rack de Efeitos FX & Masterização -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 hover:border-brand-gold/40 transition-all flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-brand-gold/10 flex items-center justify-center text-brand-gold border border-brand-gold/20">
+            <i data-lucide="sliders" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white">5. Arsenal de Masterização & FX</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed flex-1">
+            Comande texturas analógicas (Cassette Tape Hiss, Vinyl Crackle, Lo-Fi), ambiências (Cathedral Reverb, Stadium Delay) e efeitos modernos (Sidechain, 808 Distort, Autotune, Bitcrusher).
+          </p>
+          <div class="text-xs text-brand-gold font-mono bg-brand-gold/5 p-2.5 rounded-xl border border-brand-gold/10">
+            🎚️ Texturas de estúdio profissional
+          </div>
+        </div>
+
+        <!-- 6. IA Híbrida: Gemini + Ollama Local -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 hover:border-brand-emerald/40 transition-all flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-brand-emerald/10 flex items-center justify-center text-brand-emerald border border-brand-emerald/20">
+            <i data-lucide="bot" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white">6. Suporte Híbrido: Nuvem & Local</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed flex-1">
+            Use a nuvem ultra-rápida com o <strong>Google Gemini (Flash/Pro)</strong> ou rode <strong>100% Grátis, Ilimitado e Privado</strong> na sua máquina através do <strong>Ollama</strong> (Llama 3, Mistral, Gemma, Phi-3).
+          </p>
+          <div class="text-xs text-brand-emerald font-mono bg-brand-emerald/5 p-2.5 rounded-xl border border-brand-emerald/10">
+            🔒 Total privacidade & zero custos de API
+          </div>
+        </div>
+
+        <!-- 7. Gerenciador de Projetos & Histórico -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 hover:border-pink-500/40 transition-all flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-pink-500/10 flex items-center justify-center text-pink-400 border border-pink-500/20">
+            <i data-lucide="folder-kanban" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white">7. Centro de Comando / Dashboard</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed flex-1">
+            Organize seu repertório. Crie infinitas composições, salve versões, exporte projetos inteiros em arquivo JSON portátil e importe backups com 1 clique.
+          </p>
+          <div class="text-xs text-pink-400 font-mono bg-pink-500/5 p-2.5 rounded-xl border border-pink-500/10">
+            💾 Exportação & Importação JSON completa
+          </div>
+        </div>
+
+        <!-- 8. Painel de Prompts Mestres -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 hover:border-purple-500/40 transition-all flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400 border border-purple-500/20">
+            <i data-lucide="shield-check" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white">8. Customização de Prompts Mestres</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed flex-1">
+            Tenha controle sobre o cérebro da IA. Painel de administração para ajustar os prompts de sistema, diretrizes de composição, temperatura de criatividade e regras líricas personalizadas.
+          </p>
+          <div class="text-xs text-purple-400 font-mono bg-purple-500/5 p-2.5 rounded-xl border border-purple-500/10">
+            ⚙️ Ajuste fino dos prompts do sistema
+          </div>
+        </div>
+
+        <!-- 9. Multi-idioma & Tutoriais -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 hover:border-cyan-500/40 transition-all flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 border border-cyan-500/20">
+            <i data-lucide="languages" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white">9. Multi-idioma & Guia Completo</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed flex-1">
+            Interface e geração com suporte total para Português (PT-BR), Inglês (EN) e Espanhol (ES). Acompanha tutoriais e melhores práticas comprovadas para Suno, Udio e Mureka.
+          </p>
+          <div class="text-xs text-cyan-400 font-mono bg-cyan-500/5 p-2.5 rounded-xl border border-cyan-500/10">
+            🌐 Português, Inglês e Espanhol
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== ARSENAL SONORO (BENTO BOX INTERATIVO) ==================== -->
+  <section id="arsenal" class="py-24 px-6 md:px-12 relative">
+    <div class="max-w-7xl mx-auto space-y-16">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-primary/10 text-brand-primary text-xs font-bold uppercase tracking-wider border border-brand-primary/20">
+          <i data-lucide="radio" class="w-3.5 h-3.5"></i> Tecnologia Proprietária
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          Arsenal Sonoro & Texturas de Estúdio
+        </h2>
+        <p class="text-zinc-400 text-base sm:text-lg">
+          Não peça simplesmente "música boa". Comande cada elemento acústico com exatidão matemática.
+        </p>
+      </div>
+
+      <!-- Bento Box Layout -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Large Box: Masterização -->
+        <div class="md:col-span-2 glass-card rounded-3xl p-8 sm:p-10 relative overflow-hidden flex flex-col justify-between group">
+          <div class="absolute -right-10 -top-10 w-64 h-64 bg-brand-primary/10 blur-[90px] rounded-full pointer-events-none group-hover:bg-brand-primary/20 transition-all"></div>
+          
+          <div class="space-y-4 relative z-10">
+            <div class="w-12 h-12 rounded-2xl bg-brand-primary/10 flex items-center justify-center text-brand-primary border border-brand-primary/20">
+              <i data-lucide="disc" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-2xl sm:text-3xl font-bold text-white">Masterização Analógica & Textura Sônica</h3>
+            <p class="text-zinc-400 text-sm sm:text-base max-w-xl leading-relaxed">
+              Injete o calor das fitas analógicas, ruído de vinil clássico ou o peso de uma masterização de festival moderno. O IAPLAY traduz termos de mixagem para metatags que as IAs compreendem perfeitamente.
+            </p>
+          </div>
+
+          <div class="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 relative z-10">
+            <div class="p-3 rounded-xl bg-black/50 border border-white/5 text-center">
+              <div class="text-xs font-bold text-white">Cassette Tape</div>
+              <div class="text-[10px] text-zinc-500">Calor & Saturação</div>
+            </div>
+            <div class="p-3 rounded-xl bg-black/50 border border-white/5 text-center">
+              <div class="text-xs font-bold text-white">Vinyl Crackle</div>
+              <div class="text-[10px] text-zinc-500">Textura Vintage</div>
+            </div>
+            <div class="p-3 rounded-xl bg-black/50 border border-white/5 text-center">
+              <div class="text-xs font-bold text-white">Stereo Width</div>
+              <div class="text-[10px] text-zinc-500">Imersão 3D</div>
+            </div>
+            <div class="p-3 rounded-xl bg-black/50 border border-white/5 text-center">
+              <div class="text-xs font-bold text-white">Limiter -0.1dB</div>
+              <div class="text-[10px] text-zinc-500">Impacto Comercial</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tall Box: FX Rack -->
+        <div class="md:col-span-1 glass-card rounded-3xl p-8 relative overflow-hidden flex flex-col justify-between group border-brand-accent/30">
+          <div class="space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-brand-accent/10 flex items-center justify-center text-brand-accent border border-brand-accent/20">
+              <i data-lucide="activity" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white">Rack de Efeitos FX</h3>
+            <p class="text-zinc-400 text-sm leading-relaxed">
+              Autotune moderno, Reverb de Catedral, Sidechain agressivo ou Bitcrusher glitch com acionamento em 1 clique.
+            </p>
+          </div>
+
+          <div class="space-y-3 pt-6">
+            <div class="p-3 rounded-xl bg-black/60 border border-white/5 space-y-1.5">
+              <div class="flex justify-between text-[11px] font-bold">
+                <span class="text-zinc-400">Stadium Reverb (Wet)</span>
+                <span class="text-brand-primary">85%</span>
+              </div>
+              <div class="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-brand-primary to-brand-secondary w-[85%] rounded-full"></div>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-black/60 border border-white/5 space-y-1.5">
+              <div class="flex justify-between text-[11px] font-bold">
+                <span class="text-zinc-400">808 Distortion Punch</span>
+                <span class="text-brand-accent">92%</span>
+              </div>
+              <div class="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-purple-500 to-indigo-500 w-[92%] rounded-full"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Box 3: Controle Rítmico -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-brand-emerald/10 flex items-center justify-center text-brand-emerald border border-brand-emerald/20">
+              <i data-lucide="gauge" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">Controle de Ritmo & Groove</h3>
+            <p class="text-zinc-400 text-sm leading-relaxed">
+              Especifique se o beat é sincopado, 4x4 Four-on-the-floor, Half-time, Trap Triplet ou Balada Acústica.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-2">
+            <span class="px-2 py-1 bg-white/5 text-zinc-300 rounded text-xs">Syncopated</span>
+            <span class="px-2 py-1 bg-white/5 text-zinc-300 rounded text-xs">4x4 House</span>
+            <span class="px-2 py-1 bg-white/5 text-zinc-300 rounded text-xs">Half-Time</span>
+            <span class="px-2 py-1 bg-white/5 text-zinc-300 rounded text-xs">Polyrhythm</span>
+          </div>
+        </div>
+
+        <!-- Box 4: Instrumentação Seletiva -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-brand-gold/10 flex items-center justify-center text-brand-gold border border-brand-gold/20">
+              <i data-lucide="guitar" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">Instrumentação Precisa</h3>
+            <p class="text-zinc-400 text-sm leading-relaxed">
+              Combine Guitarras Stratocaster com Overdrive, Sintetizadores Moog analógicos, Pianos de Cauda ou Brass Sections.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-2">
+            <span class="px-2 py-1 bg-brand-gold/10 text-brand-gold rounded text-xs border border-brand-gold/20">Strat Overdrive</span>
+            <span class="px-2 py-1 bg-brand-gold/10 text-brand-gold rounded text-xs border border-brand-gold/20">Analog Moog</span>
+            <span class="px-2 py-1 bg-brand-gold/10 text-brand-gold rounded text-xs border border-brand-gold/20">Grand Piano</span>
+          </div>
+        </div>
+
+        <!-- Box 5: Vibe Emocional & Ambiência -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/20">
+              <i data-lucide="sun-medium" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">Ambiência & Mood Harmônico</h3>
+            <p class="text-zinc-400 text-sm leading-relaxed">
+              Ajuste a atmosfera emocional para direcionar a paleta de acordes maiores, menores ou dissonantes na IA.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-2">
+            <span class="px-2 py-1 bg-blue-500/10 text-blue-400 rounded text-xs border border-blue-500/20">Cinematic Dark</span>
+            <span class="px-2 py-1 bg-blue-500/10 text-blue-400 rounded text-xs border border-blue-500/20">Uplifting</span>
+            <span class="px-2 py-1 bg-blue-500/10 text-blue-400 rounded text-xs border border-blue-500/20">Melancholic</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== COMPARATIVO: O JEITO AMADOR VS JEITO IAPLAY ==================== -->
+  <section id="comparativo" class="py-24 px-6 md:px-12 bg-[#050507] border-y border-white/5">
+    <div class="max-w-6xl mx-auto space-y-16">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-bold uppercase tracking-wider border border-red-500/20">
+          <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> A Diferença Real
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          Por Que Prompts Manuais Queimam Seus Créditos?
+        </h2>
+        <p class="text-zinc-400 text-base sm:text-lg">
+          Veja a diferença entre tentar a sorte com frases genéricas e comandar a IA com arquitetura de áudio profissional.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+        
+        <!-- O Jeito Amador -->
+        <div class="rounded-3xl p-8 bg-red-950/10 border border-red-500/20 flex flex-col justify-between space-y-6 relative overflow-hidden">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-red-500/20 text-red-400 font-bold text-xs uppercase flex items-center gap-1.5">
+                <i data-lucide="x-circle" class="w-4 h-4"></i> O Jeito Amador (Aposta)
+              </span>
+              <span class="text-xs text-red-400 font-mono">50 Créditos Desperdiçados</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-black/60 border border-red-500/30 font-mono text-xs text-zinc-400">
+              <span class="text-zinc-500">// Prompt vago digitado no Suno:</span><br />
+              <span class="text-red-300">"Crie um pop rock triste com vocal feminino e violão"</span>
+            </div>
+
+            <ul class="space-y-3.5 text-sm text-zinc-400">
+              <li class="flex items-start gap-3">
+                <i data-lucide="x" class="w-5 h-5 text-red-500 shrink-0 mt-0.5"></i>
+                <span><strong>Sem Estrutura:</strong> A IA corta refrões ao meio e não sabe onde encaixar o solo ou a ponte.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i data-lucide="x" class="w-5 h-5 text-red-500 shrink-0 mt-0.5"></i>
+                <span><strong>Voz Robótica:</strong> Letras sem contagem métrica forçam a IA a acelerar e desacelerar de forma bizarra.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i data-lucide="x" class="w-5 h-5 text-red-500 shrink-0 mt-0.5"></i>
+                <span><strong>Desperdício de Dinheiro:</strong> Você precisa gerar 10 a 20 vezes para conseguir 1 take aceitável.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="p-3 rounded-xl bg-red-500/10 text-red-400 text-xs text-center font-bold">
+            Resultado: Frustração & Créditos Esgotados
+          </div>
+        </div>
+
+        <!-- O Jeito IAPLAY -->
+        <div class="rounded-3xl p-8 bg-brand-emerald/5 border border-brand-emerald/30 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-[0_0_50px_rgba(16,185,129,0.1)]">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-brand-emerald/20 text-brand-emerald font-bold text-xs uppercase flex items-center gap-1.5">
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i> O Jeito IAPLAY (Engenharia)
+              </span>
+              <span class="text-xs text-brand-emerald font-mono">1 Geração Perfeita</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-black/60 border border-brand-emerald/40 font-mono text-xs text-zinc-300">
+              <span class="text-zinc-500">// Metatags injetadas + Prompt de Estilo:</span><br />
+              <span class="text-brand-emerald font-bold">[Intro: Acoustic Guitar 120bpm]</span><br />
+              <span class="text-brand-primary">[Verse 1]</span> (Intimate Vocals, Cassette Hiss)<br />
+              <span class="text-purple-400">[Chorus]</span> (Huge Reverb, Overdriven Guitars)
+            </div>
+
+            <ul class="space-y-3.5 text-sm text-zinc-300">
+              <li class="flex items-start gap-3">
+                <i data-lucide="check" class="w-5 h-5 text-brand-emerald shrink-0 mt-0.5"></i>
+                <span><strong>Comando Rigoroso:</strong> As metatags forçam o motor sonoro a respeitar as transições dinâmicas.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i data-lucide="check" class="w-5 h-5 text-brand-emerald shrink-0 mt-0.5"></i>
+                <span><strong>Métrica Impecável:</strong> Sílabas calculadas para o BPM resultam em vocais com flow orgânico de estúdio.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i data-lucide="check" class="w-5 h-5 text-brand-emerald shrink-0 mt-0.5"></i>
+                <span><strong>Economia Total:</strong> Acerte o arranjo logo nas primeiras tentativas e economize seus créditos.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="p-3 rounded-xl bg-brand-emerald/20 text-brand-emerald text-xs text-center font-bold">
+            Resultado: Faixas com Qualidade Comercial na Primeira Tentativa
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== GALERIA DE SCREENSHOTS REAL DO APP ==================== -->
+  <section id="screenshots" class="py-24 px-6 md:px-12 bg-[#09090e] border-b border-white/5 relative">
+    <div class="max-w-7xl mx-auto space-y-12">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-gold/10 text-brand-gold text-xs font-bold uppercase tracking-wider border border-brand-gold/20">
+          <i data-lucide="image" class="w-3.5 h-3.5"></i> Interface Real
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          Conheça o IAPLAY Studio por Dentro
+        </h2>
+        <p class="text-zinc-400 text-base sm:text-lg">
+          Interface ultra-fluida desenvolvida em React + Vite e otimizada para fluxo de trabalho rápido de produtores musicais.
+        </p>
+      </div>
+
+      <!-- Screenshot Tabs -->
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3" id="screenshot-tabs">
+        <button onclick="switchScreenshot('editor')" id="tab-editor" class="tab-btn px-4 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold bg-brand-primary text-white shadow-lg transition-all">
+          🎵 Editor de Composição
+        </button>
+        <button onclick="switchScreenshot('arsenal')" id="tab-arsenal" class="tab-btn px-4 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 transition-all">
+          🎛️ Arsenal Sonoro
+        </button>
+        <button onclick="switchScreenshot('dashboard')" id="tab-dashboard" class="tab-btn px-4 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 transition-all">
+          🚀 Centro de Comando (Dashboard)
+        </button>
+        <button onclick="switchScreenshot('settings')" id="tab-settings" class="tab-btn px-4 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 transition-all">
+          🧠 Configuração de IA & Ollama
+        </button>
+        <button onclick="switchScreenshot('admin')" id="tab-admin" class="tab-btn px-4 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 transition-all">
+          ⚙️ Painel de Prompts Mestres
+        </button>
+      </div>
+
+      <!-- Screenshot Display Window -->
+      <div class="rounded-3xl p-1 bg-gradient-to-b from-white/15 to-transparent shadow-2xl max-w-6xl mx-auto">
+        <div class="rounded-[22px] bg-[#0c0c12] border border-white/10 overflow-hidden">
+          
+          <div class="p-4 bg-[#11111a] border-b border-white/5 flex items-center justify-between text-xs text-zinc-400 font-mono">
+            <span id="screenshot-title" class="font-bold text-white flex items-center gap-2">
+              <i data-lucide="sliders" class="w-4 h-4 text-brand-primary"></i> Editor de Composição com Inserção de Metatags & Tags de Estilo
+            </span>
+            <span class="text-zinc-500 hidden sm:inline">100% Responsivo • Pinokio Launcher</span>
+          </div>
+
+          <div class="p-2 sm:p-4 bg-black/40 flex items-center justify-center min-h-[400px]">
+            <img id="screenshot-img" src="public/screenshots/editor.png" alt="Screenshot do IAPLAY Studio" 
+                 class="w-full h-auto rounded-xl border border-white/10 shadow-2xl transition-all duration-300"
+                 onerror="this.src='docs/screenshots/editor.png'" />
+          </div>
+
+          <div class="p-4 bg-[#11111a] border-t border-white/5 text-xs text-zinc-400 text-center" id="screenshot-desc">
+            Painel completo com editor de texto formatado, injeção de metatags [Verse, Chorus, Drop], ajuste de parâmetros harmônicos e caixa lateral de cópia instantânea para Suno e Udio.
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== COMO INSTALAR NO PINOKIO (1-CLICK) ==================== -->
+  <section id="download-pinokio" class="py-24 px-6 md:px-12 relative overflow-hidden bg-gradient-to-b from-[#08080d] via-[#0b0c16] to-[#08080d]">
+    
+    <!-- Background Glows -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-blue-600/15 blur-[160px] rounded-full pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto space-y-16 relative z-10">
+      
+      <div class="text-center space-y-4">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 text-blue-400 text-xs font-bold uppercase tracking-wider border border-blue-500/20 pinokio-glow">
+          <i data-lucide="package" class="w-4 h-4"></i> Instalação 1-Click Automatizada
+        </div>
+        
+        <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
+          Como Baixar e Rodar no <span class="text-pinokio-gradient">Pinokio</span>
+        </h2>
+        
+        <p class="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto">
+          O IAPLAY Studio foi totalmente empacotado para o ecossistema Pinokio. Não requer configurações complicadas de terminal.
+        </p>
+      </div>
+
+      <!-- 3 Installation Steps -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Step 1 -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 border-blue-500/20 relative group">
+          <div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 font-black text-xl flex items-center justify-center border border-blue-500/30">
+            1
+          </div>
+          <h3 class="text-xl font-bold text-white">Acesse o Post no Pinokio</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Abra a página oficial do IAPLAY Studio no navegador do Pinokio ou no seu browser através do link oficial.
+          </p>
+          <div class="pt-2">
+            <span class="text-xs font-mono text-blue-400 bg-blue-950/40 px-3 py-1.5 rounded-lg border border-blue-800/50 block truncate">
+              pinokio.co/posts/01m0jm...
+            </span>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 border-purple-500/20 relative group">
+          <div class="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 font-black text-xl flex items-center justify-center border border-purple-500/30">
+            2
+          </div>
+          <h3 class="text-xl font-bold text-white">Clique em "Install"</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            O script inteligente <code class="text-purple-300">install.json</code> baixa automaticamente o Node.js, configura as dependências e prepara o ambiente local.
+          </p>
+          <div class="pt-2">
+            <span class="text-xs text-brand-emerald font-semibold flex items-center gap-1.5">
+              <i data-lucide="check-circle" class="w-4 h-4"></i> 100% Automático e Seguro
+            </span>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="glass-card rounded-3xl p-8 space-y-4 border-brand-emerald/20 relative group">
+          <div class="w-12 h-12 rounded-2xl bg-brand-emerald/20 text-brand-emerald font-black text-xl flex items-center justify-center border border-brand-emerald/30">
+            3
+          </div>
+          <h3 class="text-xl font-bold text-white">Clique em "Start"</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            O launcher inicia o servidor local em <code class="text-emerald-300">localhost:5173</code> e abre a interface completa no seu navegador pronta para compor.
+          </p>
+          <div class="pt-2">
+            <span class="text-xs text-brand-emerald font-semibold flex items-center gap-1.5">
+              <i data-lucide="play" class="w-4 h-4"></i> Pronto para Criar Hits
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Main Pinokio Post Download Card -->
+      <div class="rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-blue-950/40 via-purple-950/40 to-black border border-blue-500/30 text-center space-y-8 shadow-2xl relative overflow-hidden pinokio-glow">
+        
+        <div class="space-y-3 max-w-2xl mx-auto">
+          <h3 class="text-2xl sm:text-4xl font-extrabold text-white">
+            Baixe Agora no Pinokio
+          </h3>
+          <p class="text-zinc-300 text-sm sm:text-base">
+            Clique no botão abaixo para ir direto à página oficial do IAPLAY Studio no repositório do Pinokio:
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="https://pinokio.co/posts/01m0jmva8zw723vmywwp8jvk35" target="_blank" rel="noopener noreferrer"
+             class="w-full sm:w-auto px-10 py-5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-extrabold text-lg sm:text-xl flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(59,130,246,0.5)] hover:scale-105 transition-all duration-300">
+            <i data-lucide="download-cloud" class="w-6 h-6 animate-bounce"></i>
+            <span>Ir para o Download no Pinokio</span>
+            <i data-lucide="external-link" class="w-5 h-5"></i>
+          </a>
+        </div>
+
+        <div class="text-xs text-zinc-400 font-mono">
+          URL Oficial: <a href="https://pinokio.co/posts/01m0jmva8zw723vmywwp8jvk35" target="_blank" class="text-blue-400 underline hover:text-blue-300">https://pinokio.co/posts/01m0jmva8zw723vmywwp8jvk35</a>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== FAQ (PERGUNTAS FREQUENTES) ==================== -->
+  <section id="faq" class="py-24 px-6 md:px-12 bg-[#050507] border-y border-white/5">
+    <div class="max-w-4xl mx-auto space-y-12">
+      
+      <div class="text-center space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 text-zinc-300 text-xs font-bold uppercase tracking-wider border border-white/10">
+          <i data-lucide="help-circle" class="w-3.5 h-3.5"></i> Tire suas Dúvidas
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          Perguntas Frequentes
+        </h2>
+      </div>
+
+      <div class="space-y-4" id="faq-accordion">
+        
+        <!-- Q1 -->
+        <details class="group glass-card rounded-2xl p-6 transition-all [&_summary::-webkit-details-marker]:hidden border border-white/5 open:border-brand-primary/30">
+          <summary class="flex items-center justify-between cursor-pointer font-bold text-white text-base sm:text-lg">
+            <span>O aplicativo gera o arquivo de áudio diretamente?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-zinc-400 group-open:rotate-180 transition-transform"></i>
+          </summary>
+          <p class="text-zinc-400 text-sm mt-4 leading-relaxed">
+            O <strong>IAPLAY Studio</strong> atua como o seu copiloto e engenheiro de prompts/letras. Ele cria, organiza e otimiza a estrutura lírica com metatags industriais e gera os prompts sonoros ideais. Com 1 clique você copia esses comandos e cola nas ferramentas geradoras de áudio como <strong>Suno AI, Udio e Mureka</strong>.
+          </p>
+        </details>
+
+        <!-- Q2 -->
+        <details class="group glass-card rounded-2xl p-6 transition-all [&_summary::-webkit-details-marker]:hidden border border-white/5 open:border-brand-primary/30">
+          <summary class="flex items-center justify-between cursor-pointer font-bold text-white text-base sm:text-lg">
+            <span>Posso usar modelos de IA 100% locais e gratuitos?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-zinc-400 group-open:rotate-180 transition-transform"></i>
+          </summary>
+          <p class="text-zinc-400 text-sm mt-4 leading-relaxed">
+            Sim! O IAPLAY Studio possui integração nativa com o <strong>Ollama</strong>. Você pode rodar modelos como <em>Llama 3, Mistral, Gemma ou Phi-3</em> diretamente no seu computador, com total privacidade e sem gastar com chaves de API.
+          </p>
+        </details>
+
+        <!-- Q3 -->
+        <details class="group glass-card rounded-2xl p-6 transition-all [&_summary::-webkit-details-marker]:hidden border border-white/5 open:border-brand-primary/30">
+          <summary class="flex items-center justify-between cursor-pointer font-bold text-white text-base sm:text-lg">
+            <span>Como o IAPLAY economiza meus créditos no Suno e Udio?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-zinc-400 group-open:rotate-180 transition-transform"></i>
+          </summary>
+          <p class="text-zinc-400 text-sm mt-4 leading-relaxed">
+            IAs de música costumam inventar melodias desconexas quando recebem prompts vagos. O IAPLAY injeta metatags específicas de seção como <code class="text-brand-primary">[Verse]</code>, <code class="text-brand-secondary">[Chorus]</code> e <code class="text-purple-400">[Drop]</code> com contagem métrica de sílabas, forçando a IA a seguir a métrica certa na primeira tentativa.
+          </p>
+        </details>
+
+        <!-- Q4 -->
+        <details class="group glass-card rounded-2xl p-6 transition-all [&_summary::-webkit-details-marker]:hidden border border-white/5 open:border-brand-primary/30">
+          <summary class="flex items-center justify-between cursor-pointer font-bold text-white text-base sm:text-lg">
+            <span>Preciso de conhecimento prévio em teoria musical?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-zinc-400 group-open:rotate-180 transition-transform"></i>
+          </summary>
+          <p class="text-zinc-400 text-sm mt-4 leading-relaxed">
+            Não! O Wizard interativo e os presets do Arsenal Sonoro guiam você passo a passo na seleção de sentimentos, BPM, timbres e ritmos adequados para cada estilo musical.
+          </p>
+        </details>
+
+        <!-- Q5 -->
+        <details class="group glass-card rounded-2xl p-6 transition-all [&_summary::-webkit-details-marker]:hidden border border-white/5 open:border-brand-primary/30">
+          <summary class="flex items-center justify-between cursor-pointer font-bold text-white text-base sm:text-lg">
+            <span>Onde posso baixar o IAPLAY Studio?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-zinc-400 group-open:rotate-180 transition-transform"></i>
+          </summary>
+          <p class="text-zinc-400 text-sm mt-4 leading-relaxed">
+            O download e a instalação em 1-Click estão disponíveis no post oficial do Pinokio: <a href="https://pinokio.co/posts/01m0jmva8zw723vmywwp8jvk35" target="_blank" class="text-blue-400 underline">pinokio.co/posts/01m0jmva8zw723vmywwp8jvk35</a>.
+          </p>
+        </details>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== FINAL CTA BANNER ==================== -->
+  <section class="py-24 px-6 md:px-12 relative overflow-hidden text-center">
+    
+    <!-- Intense Glow in Background -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-r from-brand-primary/25 via-brand-secondary/25 to-blue-600/25 blur-[150px] rounded-full pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto space-y-8 relative z-10">
+      
+      <div class="w-16 h-16 rounded-3xl bg-gradient-to-tr from-brand-primary to-brand-secondary flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(255,107,61,0.5)]">
+        <i data-lucide="music-4" class="w-8 h-8 text-white"></i>
+      </div>
+
+      <h2 class="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
+        Pronto para Elevar suas Músicas com IA ao Nível Profissional?
+      </h2>
+
+      <p class="text-zinc-400 text-base sm:text-xl max-w-2xl mx-auto font-light">
+        Baixe agora mesmo no Pinokio e comece a compor sem desperdiçar créditos.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+        <a href="https://pinokio.co/posts/01m0jmva8zw723vmywwp8jvk35" target="_blank" rel="noopener noreferrer"
+           class="w-full sm:w-auto px-10 py-5 rounded-2xl bg-white text-black font-extrabold text-lg flex items-center justify-center gap-3 shadow-[0_0_50px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95 transition-all duration-300">
+          <i data-lucide="download" class="w-5 h-5"></i>
+          <span>Baixar IAPLAY Studio no Pinokio</span>
+          <i data-lucide="arrow-right" class="w-5 h-5"></i>
+        </a>
+      </div>
+
+      <p class="text-xs text-zinc-500 font-mono pt-2">
+        Disponível para Windows, Mac e Linux via Pinokio
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="py-12 px-6 md:px-12 bg-black border-t border-white/5 text-zinc-500 text-xs font-medium">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+      
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-brand-primary flex items-center justify-center text-white font-bold">
+          <i data-lucide="music-4" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <div class="font-bold text-white text-sm">IAPLAY Studio</div>
+          <div>Compositor Musical & Engenharia de Prompts com IA</div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-6 text-zinc-400">
+        <a href="#como-funciona" class="hover:text-white transition-colors">Como Funciona</a>
+        <a href="#recursos" class="hover:text-white transition-colors">Recursos</a>
+        <a href="#arsenal" class="hover:text-white transition-colors">Arsenal Sonoro</a>
+        <a href="#comparativo" class="hover:text-white transition-colors">Comparativo</a>
+        <a href="https://pinokio.co/posts/01m0jmva8zw723vmywwp8jvk35" target="_blank" class="text-blue-400 hover:text-blue-300 font-bold">Post no Pinokio</a>
+      </div>
+
+      <div>
+        © 2024-2026 IA-Play. Todos os direitos reservados.
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ==================== INTERACTIVE JAVASCRIPT ==================== -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Copy Demo Prompt Handler
+    function copyDemoPrompt() {
+      const demoText = `[Intro: Atmospheric Synth, Soft Vinyl Crackle, 115 BPM]
+
+[Verse 1] (Male Vocals, Intimate, Dry Reverb)
+Luzes neon piscando na avenida vazia,
+O tempo corre rápido em cada esquina fria.
+Promessas de silício que tentam me guiar,
+Mas no reflexo do vidro só vejo o seu olhar.
+
+[Pre-Chorus] (Rising Drums, Sidechain Build-up)
+O pulso acelera, a frequência vai subir,
+Não resta mais espaço para desistir!
+
+[Chorus] (Explosive Drop, Distorted 808 Bass, Anthemic Vocals)
+SOMOS O ECO NA ESCURIDÃO!
+BATIDAS QUE QUEBRAM A GRAVIDADE NO CHÃO!
+
+[Guitar Solo: Heavy Overdrive, High Energy, Stereo Delay]
+[Outro: Fading Synths, Heartbeat Bass]
+
+STYLE PROMPT:
+synthwave rock, anthemic vocals, explosive 808 drop, analog synthesizer, cassette tape hiss, sidechain compression, 115 bpm, key of D minor, stadium reverb, modern studio master`;
+
+      navigator.clipboard.writeText(demoText).then(() => {
+        const btn = document.getElementById('copy-demo-btn');
+        const btnText = document.getElementById('copy-btn-text');
+        btn.classList.add('bg-brand-emerald', 'text-white');
+        btnText.textContent = '✓ Copiado com Sucesso!';
+        setTimeout(() => {
+          btn.classList.remove('bg-brand-emerald', 'text-white');
+          btnText.textContent = 'Copiar Letra + Prompt com 1 Clique';
+        }, 2500);
+      });
+    }
+
+    // Screenshot Switcher
+    const screenshotsData = {
+      editor: {
+        title: '🎵 Editor de Composição com Inserção de Metatags & Tags de Estilo',
+        desc: 'Painel completo com editor de texto formatado, injeção de metatags [Verse, Chorus, Drop], ajuste de parâmetros harmônicos e caixa lateral de cópia instantânea para Suno e Udio.',
+        src: 'public/screenshots/editor.png',
+        fallback: 'docs/screenshots/editor.png'
+      },
+      arsenal: {
+        title: '🎛️ Arsenal Sonoro: Texturas de Fita, Ambiências & Efeitos FX',
+        desc: 'Controles detalhados para adicionar Cassette Tape Hiss, Vinyl Crackle, Reverb de Catedral, Autotune e ritmos sincopados traduzidos diretamente para comandos da IA.',
+        src: 'public/screenshots/arsenal.png',
+        fallback: 'docs/screenshots/arsenal.png'
+      },
+      dashboard: {
+        title: '🚀 Centro de Comando (Dashboard) & Gerenciamento de Repertório',
+        desc: 'Painel visual para organizar todos os seus projetos musicais, com criação rápida, duplicação e suporte a exportação/importação em formato JSON portátil.',
+        src: 'public/screenshots/dashboard.png',
+        fallback: 'docs/screenshots/dashboard.png'
+      },
+      settings: {
+        title: '🧠 Configurações de Inteligência Artificial & Ollama Local',
+        desc: 'Suporte híbrido flexível: alterne entre Google Gemini em nuvem e modelos 100% locais, privados e gratuitos via Ollama (Llama 3, Mistral, Gemma).',
+        src: 'public/screenshots/settings.png',
+        fallback: 'docs/screenshots/settings.png'
+      },
+      admin: {
+        title: '⚙️ Painel de Administração & Ajuste Fino de Prompts Mestres',
+        desc: 'Personalização avançada das diretrizes de engenharia de prompt do sistema, permitindo que produtores customizem as regras líricas e sônicas do estúdio.',
+        src: 'public/screenshots/admin.png',
+        fallback: 'docs/screenshots/admin.png'
+      }
+    };
+
+    function switchScreenshot(key) {
+      const data = screenshotsData[key];
+      if (!data) return;
+
+      const img = document.getElementById('screenshot-img');
+      const title = document.getElementById('screenshot-title');
+      const desc = document.getElementById('screenshot-desc');
+
+      img.style.opacity = '0';
+      setTimeout(() => {
+        img.src = data.src;
+        img.onerror = () => { img.src = data.fallback; };
+        title.innerHTML = data.title;
+        desc.innerHTML = data.desc;
+        img.style.opacity = '1';
+      }, 150);
+
+      // Update button styles
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-primary', 'text-white', 'shadow-lg');
+        btn.classList.add('bg-white/5', 'text-zinc-400');
+      });
+
+      const activeBtn = document.getElementById('tab-' + key);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-white/5', 'text-zinc-400');
+        activeBtn.classList.add('bg-brand-primary', 'text-white', 'shadow-lg');
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -10,6 +10,16 @@ echo.
 set "SCRIPT_DIR=%~dp0"
 cd /d "%SCRIPT_DIR%"
 
+REM Garante pastas locais
+if not exist "%SCRIPT_DIR%ckpts" mkdir "%SCRIPT_DIR%ckpts"
+if not exist "%SCRIPT_DIR%outputs" mkdir "%SCRIPT_DIR%outputs"
+if not exist "%SCRIPT_DIR%uploads" mkdir "%SCRIPT_DIR%uploads"
+if exist "%SCRIPT_DIR%engine" (
+    if not exist "%SCRIPT_DIR%engine\ckpts" (
+        cmd /c mklink /J "%SCRIPT_DIR%engine\ckpts" "%SCRIPT_DIR%ckpts" >nul 2>&1
+    )
+)
+
 REM 1. Verifica instalacao do Node.js
 where node >nul 2>&1
 if not errorlevel 1 goto :NODE_OK
@@ -42,21 +52,14 @@ if errorlevel 1 goto :ERRO_PYTHON
 echo [OK] Python detectado no sistema.
 
 REM 3. Cria ambiente virtual Python (env) se nao existir
-if exist "%SCRIPT_DIR%env" goto :ENV_JA_EXISTE
+if exist "%SCRIPT_DIR%env\Scripts\python.exe" goto :ENV_JA_EXISTE
 echo.
 echo [1/4] Criando ambiente virtual Python dedicado 'env'...
-where uv >nul 2>&1
-if not errorlevel 1 goto :CREATE_ENV_UV
 python -m venv "%SCRIPT_DIR%env"
-goto :ENV_CRIADO
-
-:CREATE_ENV_UV
-uv venv "%SCRIPT_DIR%env" --python 3.11 --seed --native-tls 2>nul
-if exist "%SCRIPT_DIR%env\Scripts\python.exe" goto :ENV_CRIADO
-uv venv "%SCRIPT_DIR%env" --seed --native-tls 2>nul
-if exist "%SCRIPT_DIR%env\Scripts\python.exe" goto :ENV_CRIADO
-python -m venv "%SCRIPT_DIR%env"
-:ENV_CRIADO
+if not exist "%SCRIPT_DIR%env\Scripts\python.exe" (
+    where uv >nul 2>&1
+    if not errorlevel 1 uv venv "%SCRIPT_DIR%env" --seed --native-tls 2>nul
+)
 goto :ENV_CHECK_OK
 
 :ENV_JA_EXISTE
@@ -96,12 +99,20 @@ echo.
 echo [4/4] Instalando dependencias da interface web (Node.js)...
 call npm install
 
-REM 7. Download dos pesos neurais YuE2
+REM 7. Modelos neurais YuE2 3B & SheetSage2
 echo.
 echo ====================================================================
-echo   Verificando e baixando pesos neurais YuE2 (Hugging Face)
+echo   Modelos Neurais YuE2 3B & SheetSage2 (~6 GB)
 echo ====================================================================
-"%PYTHON_EXE%" "%SCRIPT_DIR%server\download_models.py"
+echo Voce pode baixar os modelos neurais agora ou diretamente pela
+echo interface grafica na hora de gerar a musica pela primeira vez!
+echo.
+set /p BAIXAR_AGORA="Deseja baixar os modelos agora? (S/N) [Padrao: N]: "
+if /i "%BAIXAR_AGORA%"=="S" (
+    "%PYTHON_EXE%" "%SCRIPT_DIR%server\download_models.py"
+) else (
+    echo [INFO] Download pulado. Voce podera baixar direto pelo painel do estudio!
+)
 
 echo.
 echo ====================================================================

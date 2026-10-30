@@ -43,6 +43,21 @@ O **IAPLAY Studio Standalone** é uma estação de trabalho de áudio (DAW assis
 
 ---
 
+## 🚀 Novidades da Versão 3.5.1 (30/10/2026)
+
+- ⚡ **Estabilidade e Performance Aprimoradas:**
+  - Sincronização completa de todos os módulos de geração lírica, regras de seção (100+ técnicas vocais) e engenharia de prompts calibrados para Suno AI, Udio e Mureka.
+- 🔴🟢 **Suporte de Hardware e Camada de Aceleração YuE2:**
+  - Otimizações no motor neural local YuE2 3B e SheetSage2 (~5.5 GB de pesos em `ckpts/`) com aceleração nativa via NVIDIA CUDA e modo CPU.
+- 🌐 **Ecossistema Multilíngue Integrado (PT / EN / ES):**
+  - Interface do estúdio 100% traduzida em 3 idiomas com sistema de fallback resiliente.
+- 🧹 **Navegação Limpa e Segura (Sem Anúncios):**
+  - Versão standalone totalmente livre de códigos de anúncios externos ou verificadores de tráfego, garantindo abertura rápida e em aba única no navegador.
+- 📰 **Post de Atualização no Blog Interno:**
+  - O estúdio agora exibe o post oficial de lançamento da versão 3.5.1 na aba de notícias com o changelog detalhado.
+
+---
+
 ## 🚀 Instalação Rápida (Em 1 Clique)
 
 ### No Windows:

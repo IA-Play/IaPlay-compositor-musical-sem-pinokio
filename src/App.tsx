@@ -21,7 +21,7 @@ import { generateUUID } from './utils/uuid';
 import { getLocalProjects, saveProject } from './services/projectService';
 
 // --- CONTROLE DE VERSÃO ---
-const CURRENT_VERSION = '3.3.1';
+const CURRENT_VERSION = '3.5.0';
 
 
 
@@ -59,12 +59,15 @@ const EditorWrapper = () => {
 
   // DIRTY STATE TRACKING: Guarda snapshot do último estado salvo
   const lastSavedSnapshotRef = React.useRef<string | null>(null);
+  const lastLoadedProjectIdRef = React.useRef<string | null>(null);
   const [isDirty, setIsDirty] = React.useState(false);
 
-  // Inicializa snapshot quando o projeto é carregado pela primeira vez
+  // Inicializa snapshot quando o projeto é carregado pela primeira vez ou ao trocar de ID
   useEffect(() => {
-    if (project && lastSavedSnapshotRef.current === null) {
+    if (project && (lastSavedSnapshotRef.current === null || lastLoadedProjectIdRef.current !== project.id)) {
       lastSavedSnapshotRef.current = JSON.stringify(project);
+      lastLoadedProjectIdRef.current = project.id;
+      setIsDirty(false);
     }
   }, [project]);
 

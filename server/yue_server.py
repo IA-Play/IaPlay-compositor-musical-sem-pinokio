@@ -16,38 +16,6 @@ if sys.platform == "win32":
     except Exception:
         pass
 
-# Garante presença obrigatória do setuptools (necessário para extensões C++/CUDA do PyTorch e BigVGAN)
-try:
-    import setuptools
-except ImportError:
-    try:
-        import subprocess
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "setuptools", "wheel"])
-        import setuptools
-    except Exception as _e:
-        print(f"[IAPLAY Engine] Aviso ao tentar instalar setuptools automaticamente: {_e}")
-
-# Garante presença de cv2 (opencv) e PIL (pillow) exigidos pelo motor wgp
-try:
-    import cv2
-except ImportError:
-    try:
-        import subprocess
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "opencv-python-headless"])
-        import cv2
-    except Exception as _e:
-        print(f"[IAPLAY Engine] Aviso ao tentar instalar opencv-python-headless automaticamente: {_e}")
-
-try:
-    import PIL
-except ImportError:
-    try:
-        import subprocess
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "pillow"])
-        import PIL
-    except Exception as _e:
-        print(f"[IAPLAY Engine] Aviso ao tentar instalar pillow automaticamente: {_e}")
-
 import re
 import shutil
 import subprocess
@@ -61,8 +29,22 @@ import urllib.error
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 
-import torch
-import soundfile as sf
+try:
+    import torch
+except ImportError:
+    torch = None  # type: ignore
+
+try:
+    import soundfile as sf
+except ImportError:
+    sf = None  # type: ignore
+
+try:
+    from server.gpu_compat import get_gpu_info, apply_torch_cuda_compat_shims, ensure_pytorch_installed
+except ImportError:
+    from gpu_compat import get_gpu_info, apply_torch_cuda_compat_shims, ensure_pytorch_installed
+
+apply_torch_cuda_compat_shims()
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request, BackgroundTasks, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
@@ -125,7 +107,7 @@ def ensure_essential_dependencies():
             except Exception as e:
                 print(f"[IAPLAY Engine] Falha ao auto-instalar {pkg_name}: {e}")
 
-ensure_essential_dependencies()
+# ensure_essential_dependencies() é chamado sob demanda ao carregar o pipeline YuE2 para inicialização instantânea
 
 # Gestão inteligente do serviço local Ollama
 _ollama_process = None
@@ -331,6 +313,12 @@ def _model_download_worker():
             _download_state["downloaded_files"] = 0
             _download_state["cancel_requested"] = False
 
+        # Caso o usuário tenha instalado no Modo Leve (sem PyTorch), instala automaticamente o PyTorch para a GPU dele
+        def _update_dl_msg(msg: str):
+            with _download_lock:
+                _download_state["current_file"] = msg
+        ensure_pytorch_installed(progress_callback=_update_dl_msg)
+
         total_files = len(REQUIRED_MODEL_FILES)
         total_bytes = sum(s for _, s in REQUIRED_MODEL_FILES)
         bytes_done = 0
@@ -442,6 +430,9 @@ def get_pipeline(job_id: Optional[str] = None):
                 except Exception as e:
                     print(f"[IAPLAY Engine] Aviso ao configurar files_locator: {e}")
 
+                ensure_essential_dependencies()
+                ensure_pytorch_installed()
+                apply_torch_cuda_compat_shims()
                 import wgp
                 _pipeline, _offloadobj = wgp.load_models("yue2", output_type="audio")
                 print("[IAPLAY Engine] YuE2 carregado com sucesso e pronto para gerar músicas!")
@@ -474,43 +465,6 @@ def _run_generation_job(job_id: str, body: dict):
 
         prompt = body.get("prompt", "").strip()
         alt_prompt = body.get("alt_prompt", "").strip()
-
-        # Blindagem de Sotaque: Garante 100% de pronúncia brasileira autêntica no YuE2
-        prompt_upper = prompt.upper()
-        alt_upper = alt_prompt.upper()
-
-        is_portuguese = (
-            "[BRAZILIAN PORTUGUESE]" in prompt_upper or
-            "[PORTUGUESE]" in prompt_upper or
-            "PORTUGUÊS" in prompt_upper or
-            "PORTUGUES" in alt_upper or
-            "BRAZILIAN" in alt_upper or
-            "BRASIL" in alt_upper or
-            "SERTANEJO" in alt_upper or
-            "SAMBA" in alt_upper or
-            "PAGODE" in alt_upper or
-            "FORRÓ" in alt_upper or
-            "FORRO" in alt_upper or
-            "PISEIRO" in alt_upper or
-            "FUNK BR" in alt_upper or
-            "MPB" in alt_upper or
-            "ARROCHA" in alt_upper or
-            "GOSPEL" in alt_upper or
-            "BOSSA" in alt_upper
-        )
-
-        if is_portuguese:
-            # 1. Garante que a primeira linha da letra tenha a tag [BRAZILIAN PORTUGUESE]
-            if prompt.startswith("[PORTUGUESE]"):
-                prompt = prompt.replace("[PORTUGUESE]", "[BRAZILIAN PORTUGUESE]", 1)
-            elif not prompt.startswith("[BRAZILIAN PORTUGUESE]"):
-                prompt = f"[BRAZILIAN PORTUGUESE]\n{prompt}"
-
-            # 2. Injeta no descritor de estilo (alt_prompt) modificadores de sotaque brasileiro autêntico
-            br_tags = "brazilian portuguese vocal, authentic brazilian accent, natural brazilian pronunciation"
-            if "brazilian" not in alt_prompt.lower() and "brasil" not in alt_prompt.lower():
-                alt_prompt = f"{br_tags}, {alt_prompt}" if alt_prompt else br_tags
-            print(f"[IAPLAY Engine] Blindagem ativada: sotaque brasileiro aplicado ao YuE2.")
         duration_seconds = int(body.get("duration_seconds", 120))
         num_inference_steps = int(body.get("num_inference_steps", 32))
         guidance_scale = float(body.get("guidance_scale", 1.0))
@@ -614,7 +568,8 @@ def _run_generation_job(job_id: str, body: dict):
         filename = f"{timestamp}_seed{seed}_{clean_title}.wav"
         output_path = os.path.join(OUTPUTS_DIR, filename)
 
-        sf.write(output_path, audio_np, sample_rate)
+        import soundfile as _sf
+        _sf.write(output_path, audio_np, sample_rate)
         print(f"[IAPLAY Engine] Música salva com sucesso em: {output_path}")
 
         auto_humanize = body.get("humanize", True)
@@ -659,46 +614,22 @@ def _run_generation_job(job_id: str, body: dict):
                 j["message"] = f"Falha na síntese: {e}"
 
 
-SETTINGS_FILE = os.path.join(ROOT_DIR, "public", "settings.json")
-
-@app.get("/api/v1/settings")
-def get_system_settings_endpoint():
-    """Retorna as configurações e prompts mestres salvos em disco (settings.json)."""
-    if os.path.isfile(SETTINGS_FILE):
-        try:
-            with open(SETTINGS_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception as e:
-            return {"error": str(e)}
-    return {}
-
-@app.post("/api/v1/settings")
-async def save_system_settings_endpoint(request: Request):
-    """Grava as configurações e prompts mestres diretamente no arquivo public/settings.json."""
-    try:
-        data = await request.json()
-        os.makedirs(os.path.dirname(SETTINGS_FILE), exist_ok=True)
-        with open(SETTINGS_FILE, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
-        print(f"[IAPLAY Engine] Configurações e prompts mestres salvos em: {SETTINGS_FILE}")
-        return {"success": True, "message": "Configurações salvas em settings.json"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
 @app.get("/health")
 @app.get("/")
 def health_check():
     models_info = check_models_status()
-    device_type = "cuda" if torch.cuda.is_available() else ("mps" if hasattr(torch.backends, "mps") and torch.backends.mps.is_available() else "cpu")
-    gpu_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else ("Apple Silicon" if device_type == "mps" else "Processador (CPU)")
+    gpu_info = get_gpu_info()
     return {
         "status": "online",
         "app": "IAPLAY Studio Engine",
         "model": "YuE2 3B Neural",
         "models_installed": models_info["installed"],
         "models_progress": models_info["progress"],
-        "device": device_type,
-        "gpu": gpu_name,
+        "device": gpu_info.get("device_type", "cpu"),
+        "gpu": gpu_info.get("gpu_name", "Processador (CPU)"),
+        "gpu_vendor": gpu_info.get("vendor", "cpu"),
+        "backend": gpu_info.get("backend", "CPU"),
+        "torch_installed": gpu_info.get("torch_installed", False),
         "is_loading_pipeline": _is_loading_pipeline,
         "pipeline_loading_phase": _pipeline_loading_phase,
         "ollama_online": is_ollama_online(),

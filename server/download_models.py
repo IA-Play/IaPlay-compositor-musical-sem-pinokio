@@ -18,7 +18,12 @@ if sys.platform == "win32":
     except Exception:
         pass
 
-from huggingface_hub import hf_hub_download
+try:
+    from huggingface_hub import hf_hub_download
+except ImportError:
+    import subprocess
+    subprocess.run([sys.executable, "-m", "pip", "install", "huggingface_hub>=0.23.0"], check=False)
+    from huggingface_hub import hf_hub_download
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CKPTS_DIR = os.path.join(ROOT_DIR, "ckpts")
@@ -26,7 +31,7 @@ ENGINE_DIR = os.path.join(ROOT_DIR, "engine")
 os.makedirs(CKPTS_DIR, exist_ok=True)
 
 HF_REPO_ID = "DeepBeepMeep/TTS"
-HF_REVISION = "864a479cbf3e810e1b2c1993b438510750e383b2"
+HF_REVISION = None
 
 FILES_TO_DOWNLOAD = [
     ("YuE2_AR/YuE2_AR_int8_convrot.safetensors", "Peso Auto-Regressivo YuE2 AR (Int8)", 2925023698),
@@ -87,7 +92,7 @@ def download_all():
     print("=" * 70)
     print("  IAPLAY Studio - Download Direto dos Modelos YuE2 3B & SheetSage2")
     print(f"  Destino: {CKPTS_DIR}")
-    print(f"  Repositório Hugging Face: {HF_REPO_ID} (rev: {HF_REVISION[:8]}...)")
+    print(f"  Repositório Hugging Face: {HF_REPO_ID} (rev: {HF_REVISION[:8] if HF_REVISION else 'main'})")
     print("=" * 70)
 
     # 1. Garante qwen_vae_config.json
@@ -139,4 +144,21 @@ def download_all():
 
 
 if __name__ == "__main__":
+    if "--only-if-installed" in sys.argv:
+        mode_file = os.path.join(ROOT_DIR, ".iaplay_mode")
+        ar_file = os.path.join(CKPTS_DIR, "YuE2_AR", "YuE2_AR_int8_convrot.safetensors")
+        is_lite = False
+        if os.path.isfile(mode_file):
+            try:
+                with open(mode_file, "r", encoding="utf-8") as mf:
+                    if mf.read().strip().lower() == "lite" and not os.path.isfile(ar_file):
+                        is_lite = True
+            except Exception:
+                pass
+        elif not os.path.isfile(ar_file):
+            is_lite = True
+        if is_lite:
+            print("[IAPLAY Studio] Modo Leve detectado (pesos YuE2 não instalados). Pulando download de 6 GB na atualização.")
+            print("Para instalar os modelos musicais locais a qualquer momento, clique em 'Baixar Modelos YuE2'.")
+            sys.exit(0)
     download_all()

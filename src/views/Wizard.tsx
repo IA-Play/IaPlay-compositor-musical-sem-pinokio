@@ -42,9 +42,11 @@ export const Wizard: React.FC<WizardProps> = ({ onComplete }) => {
   };
 
   const handleFinish = () => {
+    const safeTitle = (data.title && data.title.trim()) ? data.title.trim() : t('common.new_idea');
     const newProject: Project = {
         ...INITIAL_PROJECT,
         ...data,
+        title: safeTitle,
         id: generateUUID(),
         createdAt: new Date(),
         updatedAt: new Date()
@@ -117,6 +119,7 @@ export const Wizard: React.FC<WizardProps> = ({ onComplete }) => {
                     <input 
                         value={data.title}
                         onChange={(e) => setData({...data, title: e.target.value})}
+                        onKeyDown={(e) => { if (e.key === 'Enter') setStep(3); }}
                         className="w-full bg-zinc-950 border border-white/10 rounded-xl p-4 text-xl text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder-zinc-700"
                         placeholder="Ex: Neon Heartbreak..."
                         autoFocus
@@ -135,6 +138,7 @@ export const Wizard: React.FC<WizardProps> = ({ onComplete }) => {
                     <input 
                         value={data.artistInspiration || ''}
                         onChange={(e) => setData({...data, artistInspiration: e.target.value})}
+                        onKeyDown={(e) => { if (e.key === 'Enter') handleFinish(); }}
                         className="w-full bg-zinc-950 border border-white/10 rounded-xl p-4 text-xl text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder-zinc-700"
                         placeholder="Ex: Drake, Beethoven..."
                         autoFocus

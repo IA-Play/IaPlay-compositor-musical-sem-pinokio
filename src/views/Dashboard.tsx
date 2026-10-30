@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useModal } from '../components/ModalProvider';
 import { Navbar } from '../components/Navbar';
 import { useProjects, useDeleteProjectMutation, useSaveProjectMutation } from '../services/projectHooks';
 import { generateUUID } from '../utils/uuid';
@@ -16,6 +17,7 @@ interface DashboardProps {
 export const Dashboard: React.FC<DashboardProps> = ({ createNewProject }) => {
     const { user } = useAuth();
     const { t } = useLanguage();
+    const { showAlert, showConfirm } = useModal();
     const navigate = useNavigate();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -30,7 +32,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ createNewProject }) => {
     const handleDelete = async (e: React.MouseEvent, id: string) => {
         e.preventDefault();
         e.stopPropagation();
-        if (confirm(`${t('common.delete')}?`)) {
+        if (await showConfirm(`${t('common.delete')}?`)) {
             deleteMutation.mutate(id);
         }
     };
@@ -83,7 +85,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ createNewProject }) => {
                 const rawData = JSON.parse(event.target.result);
 
                 if (!rawData.title || !rawData.arsenal) {
-                    alert(t('dashboard.invalid_file'));
+                    await showAlert(t('dashboard.invalid_file'));
                     return;
                 }
 
@@ -97,11 +99,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ createNewProject }) => {
                 };
 
                 saveMutation.mutate(newProject);
-                alert(t('dashboard.import_success'));
+                await showAlert(t('dashboard.import_success'));
 
             } catch (err) {
                 console.error(err);
-                alert(t('dashboard.import_error'));
+                await showAlert(t('dashboard.import_error'));
             }
         };
         reader.readAsText(file);

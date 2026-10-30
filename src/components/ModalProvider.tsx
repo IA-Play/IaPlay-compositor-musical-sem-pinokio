@@ -61,6 +61,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const handleCancel = () => {
         if (!resolver) return;
         setIsOpen(false);
+        if (type === 'alert') resolver.resolve(undefined);
         if (type === 'confirm') resolver.resolve(false);
         if (type === 'prompt') resolver.resolve(null);
         setResolver(null);
@@ -99,7 +100,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                                     <h3 className="text-lg font-bold text-white uppercase tracking-tight">
                                         {options.title || (type === 'alert' ? 'Aviso' : type === 'confirm' ? 'Confirmação' : 'Entrada')}
                                     </h3>
-                                    <p className="text-sm text-zinc-400 leading-relaxed">
+                                    <p className="text-sm text-zinc-400 leading-relaxed whitespace-pre-line">
                                         {message}
                                     </p>
                                 </div>

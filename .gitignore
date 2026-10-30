@@ -55,3 +55,7 @@ logs/
 *.swo
 .DS_Store
 Thumbs.db
+
+IaPlay-compositor-musical-sem-pinokio/
+.installed
+.iaplay_mode
