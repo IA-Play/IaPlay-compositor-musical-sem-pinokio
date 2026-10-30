@@ -38,7 +38,7 @@ O **IAPLAY Studio Standalone** é uma estação de trabalho de áudio (DAW assis
 - **Node.js:** Versão 18+ (LTS recomendada). [Baixar Node.js](https://nodejs.org/)
 - **Python:** Versão 3.10 ou 3.11. [Baixar Python](https://python.org/) *(Lembre-se de marcar a opção "Add Python to PATH" durante a instalação)*.
 - **Placa de Vídeo (Para IA local):**
-  - **Recomendado:** NVIDIA com 6 GB+ de VRAM (suporte a CUDA).
+  - **Recomendado:** Placa de vídeo dedicada NVIDIA GeForce/RTX (6 GB+ VRAM com suporte a CUDA) ou AMD Radeon (DirectML no Windows e ROCm no Linux).
   - **Mínimo:** 16 GB de RAM caso opte por rodar em modo CPU.
 
 ---
@@ -48,7 +48,7 @@ O **IAPLAY Studio Standalone** é uma estação de trabalho de áudio (DAW assis
 - ⚡ **Estabilidade e Performance Aprimoradas:**
   - Sincronização completa de todos os módulos de geração lírica, regras de seção (100+ técnicas vocais) e engenharia de prompts calibrados para Suno AI, Udio e Mureka.
 - 🔴🟢 **Suporte de Hardware e Camada de Aceleração YuE2:**
-  - Otimizações no motor neural local YuE2 3B e SheetSage2 (~5.5 GB de pesos em `ckpts/`) com aceleração nativa via NVIDIA CUDA e modo CPU.
+  - Otimizações no motor neural local YuE2 3B e SheetSage2 (~5.5 GB de pesos em `ckpts/`) com aceleração nativa via NVIDIA GeForce/RTX (CUDA), AMD Radeon (DirectML no Windows e ROCm no Linux) e modo CPU.
 - 🌐 **Ecossistema Multilíngue Integrado (PT / EN / ES):**
   - Interface do estúdio 100% traduzida em 3 idiomas com sistema de fallback resiliente.
 - 🧹 **Navegação Limpa e Segura (Sem Anúncios):**
