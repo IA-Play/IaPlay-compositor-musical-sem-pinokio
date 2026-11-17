@@ -4,8 +4,21 @@ import { readFileSync, existsSync, statSync, mkdirSync } from 'fs';
 import { resolve, join } from 'path';
 import { spawn } from 'child_process';
 import http from 'http';
+import net from 'net';
 
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'));
+
+// O Windows (Hyper-V/WSL/Docker) reserva faixas de portas que mudam de PC para PC (ex.: 5094-5193 inclui a 5173):
+// a reservada da EACCES e o Vite nao tenta outra sozinho. Usa a primeira porta livre da lista.
+const portaLivre = (porta: number) => new Promise<boolean>((ok) => {
+  const s = net.createServer();
+  s.once('error', () => ok(false));
+  s.listen(porta, 'localhost', () => s.close(() => ok(true)));
+});
+let devPort = 5173;
+for (const p of [5173, 5600, 4173, 3000, 8080]) {
+  if (await portaLivre(p)) { devPort = p; break; }
+}
 
 const REQUIRED_MODEL_FILES = [
   { path: 'YuE2_AR/YuE2_AR_int8_convrot.safetensors', name: 'Peso Auto-Regressivo YuE2 AR (Int8)', expectedSize: 2925023698 },
@@ -186,6 +199,7 @@ function engineManagerPlugin(): Plugin {
 export default defineConfig({
   plugins: [react(), engineManagerPlugin()],
   server: {
+    port: devPort,
     proxy: {
       '/api/v1': {
         target: 'http://127.0.0.1:42024',
