@@ -40,6 +40,11 @@ if not defined PYTHON_EXE goto :ERRO_PYTHON
 
 echo [OK] Python: %PYTHON_EXE%
 
+REM 2b. Verifica se o PyTorch instalado suporta a placa de video (ex.: RTX 50 precisa de CUDA 12.8)
+"%PYTHON_EXE%" -c "import sys,torch;c=torch.cuda.get_device_capability(0) if torch.cuda.is_available() else None;sys.exit(0 if c is None or any(a.startswith('sm_') and int(a[3:-1])==c[0] and int(a[-1])<=c[1] for a in torch.cuda.get_arch_list()) else 3)" >nul 2>&1
+if errorlevel 3 goto :CORRIGIR_TORCH
+:TORCH_OK
+
 REM 3. Verifica Node.js
 where node >nul 2>&1
 if errorlevel 1 goto :ERRO_NODE
@@ -85,7 +90,7 @@ echo [2/2] Iniciando interface grafica IAPLAY Studio...
 echo.
 echo ====================================================================
 echo   IAPLAY Studio pronto!
-echo   Acesse no navegador: http://localhost:5173
+echo   O navegador abre sozinho (endereco Local: logo abaixo)
 echo   Para encerrar a aplicacao, basta fechar esta janela.
 echo ====================================================================
 echo.
@@ -96,6 +101,13 @@ echo.
 echo [IAPLAY Studio finalizado.]
 pause
 exit /b 0
+
+:CORRIGIR_TORCH
+echo [IAPLAY] O PyTorch instalado nao suporta esta placa de video. Atualizando para CUDA 12.8...
+where uv >nul 2>&1
+if not errorlevel 1 uv --native-tls pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128 --python "%PYTHON_EXE%"
+if errorlevel 1 "%PYTHON_EXE%" -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+goto :TORCH_OK
 
 :ERRO_INSTALL
 echo [ERRO] Ocorreu uma falha na instalacao. Verifique as mensagens acima.

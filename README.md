@@ -84,7 +84,11 @@ Para usar o IAPLAY a qualquer momento:
    ```
    http://localhost:5173
    ```
+   *(Se a 5173 estiver reservada pelo Windows, o estúdio usa a próxima porta livre; o endereço aparece no terminal.)*
 3. Pronto! Crie letras, prompts e gere suas músicas à vontade.
+
+> 🛠️ **Problemas na instalação (RTX 50, porta, GPU em 0%, modo Extract) e dicas de uso do YuE2:** veja
+> [docs/SOLUCAO_DE_PROBLEMAS_E_DICAS_YUE2.md](docs/SOLUCAO_DE_PROBLEMAS_E_DICAS_YUE2.md).
 
 Para encerrar os serviços quando terminar, basta fechar a janela do CMD ou dar dois cliques em:
 ```

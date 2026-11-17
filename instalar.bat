@@ -74,10 +74,15 @@ echo [2/4] Verificando e instalando PyTorch...
 where nvidia-smi >nul 2>&1
 if errorlevel 1 goto :INSTALAR_PYTORCH_CPU
 
-echo Detectada placa de video NVIDIA. Instalando PyTorch com aceleracao CUDA...
+REM RTX 50 / Blackwell (compute capability 10+) precisam de CUDA 12.8; as demais seguem no cu124
+set "TORCH_CUDA=cu124"
+set "GPU_CC_MAJOR="
+for /f "tokens=1 delims=." %%a in ('nvidia-smi --query-gpu^=compute_cap --format^=csv^,noheader 2^>nul ^| findstr /r "^[0-9]"') do set "GPU_CC_MAJOR=%%a"
+if defined GPU_CC_MAJOR if %GPU_CC_MAJOR% GEQ 10 set "TORCH_CUDA=cu128"
+echo Detectada placa de video NVIDIA (compute %GPU_CC_MAJOR%.x). Instalando PyTorch %TORCH_CUDA%...
 where uv >nul 2>&1
-if not errorlevel 1 uv --native-tls pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 --python "%PYTHON_EXE%"
-if errorlevel 1 "%PYTHON_EXE%" -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+if not errorlevel 1 uv --native-tls pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/%TORCH_CUDA% --python "%PYTHON_EXE%"
+if errorlevel 1 "%PYTHON_EXE%" -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/%TORCH_CUDA%
 goto :PYTORCH_OK
 
 :INSTALAR_PYTORCH_CPU
